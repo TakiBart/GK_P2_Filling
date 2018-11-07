@@ -114,21 +114,18 @@
             resources.ApplyResources(this.ConstLenRB, "ConstLenRB");
             this.ConstLenRB.Name = "ConstLenRB";
             this.ConstLenRB.UseVisualStyleBackColor = true;
-            this.ConstLenRB.CheckedChanged += new System.EventHandler(this.ConstLenRB_CheckedChanged);
             // 
             // VerticalRB
             // 
             resources.ApplyResources(this.VerticalRB, "VerticalRB");
             this.VerticalRB.Name = "VerticalRB";
             this.VerticalRB.UseVisualStyleBackColor = true;
-            this.VerticalRB.CheckedChanged += new System.EventHandler(this.VerticalRB_CheckedChanged);
             // 
             // HorizontalRB
             // 
             resources.ApplyResources(this.HorizontalRB, "HorizontalRB");
             this.HorizontalRB.Name = "HorizontalRB";
             this.HorizontalRB.UseVisualStyleBackColor = true;
-            this.HorizontalRB.CheckedChanged += new System.EventHandler(this.HorizontalRB_CheckedChanged);
             // 
             // NoRestRB
             // 
@@ -137,7 +134,6 @@
             this.NoRestRB.Name = "NoRestRB";
             this.NoRestRB.TabStop = true;
             this.NoRestRB.UseVisualStyleBackColor = true;
-            this.NoRestRB.CheckedChanged += new System.EventHandler(this.NoRestRB_CheckedChanged);
             // 
             // DeleteButton
             // 
