@@ -17,14 +17,19 @@ namespace GK_P2_Filling
     public partial class Form1 : Form
     {
 
-        public Dictionary<int, MyPoint> Points = new Dictionary<int, MyPoint>();
-        int maxKey = 0;
+        public PointF[] Points = new PointF[] { new PointF(3,3), new PointF(200,15), new PointF(15, 200),
+                                                new PointF(400,500), new PointF(80,500), new PointF(200, 100)};
+        // First three are first triangle
 
+        public MyEdge Head;
+        public MyEdge[] GET;
+        public MyEdge AET;
         int iChosen;
         bool isChosen = false;
-        bool isEdgeChosen = false;
+        //bool isEdgeChosen = false;
 
         bool isBeingMoved = false;
+        bool isTriangleBeingMoved = false;
         Point mousePos;
         int r = 10;
         
@@ -32,6 +37,11 @@ namespace GK_P2_Filling
         {
             InitializeComponent();
             WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+            Head = null;
+            GET = new MyEdge[WorkspacePictureBox.Height];
+            //UpdateEdges();
+            
+            //Points = {new PointF(3,3), new}
             //OpenButton_Click(this, new EventArgs());
             // Default polygon
             //0,141,96,1,1,4,2
@@ -64,52 +74,28 @@ namespace GK_P2_Filling
         private void RedrawGraph(Graphics g)
         {
             Pen pen = new Pen(Color.Black, 3);
-            Rectangle circ = new Rectangle();
+            RectangleF circ = new RectangleF();
             SolidBrush brush = new SolidBrush(Color.Black);
-
             circ.Size = new Size(r, r);
+
+            FillScanLines();
+
             using (g)
             {
 
-                int prev = iChosen == -1 ? 0 : iChosen;
-                int next = Points[prev].INext;
-
+                //TODO - change drawing
+                //for (int i = 0; i < Points.Length/2; i++)
+                //{
+                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
+                //    {
+                //        {
+                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
+                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
+                //        }
+                //    }
+                //}
                 
-                foreach (KeyValuePair<int, MyPoint> point in Points)
-                {
-                    if (point.Value.Loc.X < WorkspacePictureBox.Width && point.Value.Loc.Y < WorkspacePictureBox.Height)
-                    {
-                        if (point.Key != maxKey - 1)
-                        {
-                            if (isEdgeChosen && point.Key == iChosen)
-                                pen.Color = Color.GreenYellow;
-
-                            //g.DrawLine(pen, new Point(point.Value.Loc.X + r / 2, point.Value.Loc.Y + r / 2), new Point(Points[point.Value.INext].Loc.X + r / 2, Points[point.Value.INext].Loc.Y + r / 2));
-                            BresenhamLine(point.Value.Loc.X + r / 2, point.Value.Loc.Y + r / 2, Points[point.Value.INext].Loc.X + r / 2, Points[point.Value.INext].Loc.Y + r / 2, pen.Color);
-                        }
-
-                        circ.Location = point.Value.Loc;
-                        pen.Color = Color.Black;
-                        brush.Color = Color.Black;
-
-                        g.DrawEllipse(pen, circ);
-
-                        g.FillEllipse(brush, circ);
-
-                    }
-                }
-                circ.Location = Points[0].Loc;
-                g.DrawEllipse(pen, circ);
-                g.FillEllipse(brush, circ);
-
-
-                if (isChosen)
-                {
-                    circ.Location = Points[iChosen].Loc;
-                    pen.Color = Color.GreenYellow;
-                    g.DrawEllipse(pen, circ);
-                }
-                WorkspacePictureBox.Refresh();
+                //WorkspacePictureBox.Refresh();
             }
             brush.Dispose();
             pen.Dispose();
@@ -136,43 +122,44 @@ namespace GK_P2_Filling
             if (e.Button == MouseButtons.Left)
             {
 
-                if (Points.Count <= 0)
+                if (Points.Length <= 0)
                     return;
 
                 Rectangle circ = new Rectangle();
                 //MyPoint closest = Points[0];
                 // #1 ========|v|=========|^|
                 int iClosest = 0;
-                int closestDist = (int)(Math.Pow(Math.Abs(Points[iClosest].Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[iClosest].Loc.Y + r / 2 - e.Y), 2));
+                int closestDist = (int)(Math.Pow(Math.Abs(Points[iClosest].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[iClosest].Y + r / 2 - e.Y), 2));
 
                 circ.Size = new Size(r, r);
                 using (g)
                 {
-                    foreach (KeyValuePair<int, MyPoint> point in Points)
+                    // TODO - change chosing vertex
+                    //
+                    for(int i = 0; i < Points.Length; i++)
                     {
-                        if (Math.Pow(Math.Abs(point.Value.Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(point.Value.Loc.Y + r / 2 - e.Y), 2) < closestDist)
+                        if (Math.Pow(Math.Abs(Points[i].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[i].Y + r / 2 - e.Y), 2) < closestDist)
                         {
-                            iClosest = point.Key;
-                            closestDist = (int)(Math.Pow(Math.Abs(point.Value.Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(point.Value.Loc.Y + r / 2 - e.Y), 2));
+                            iClosest = i;
+                            closestDist = (int)(Math.Pow(Math.Abs(Points[i].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[i].Y + r / 2 - e.Y), 2));
                         }
 
-                        isEdgeChosen = false;
-                        NoRestRB.Enabled = false;
-                        HorizontalRB.Enabled = false;
-                        VerticalRB.Enabled = false;
-                        ConstLenRB.Enabled = false;
-                        AddVerBut.Enabled = false;
                     }
+
+                    iChosen = iClosest;
+                    isBeingMoved = true;
 
                     if (closestDist < 800)
                     {
+                        isTriangleBeingMoved = false;
                         isChosen = true;
-                        DeleteButton.Enabled = true;
-                        iChosen = iClosest;
-                        isBeingMoved = true;
+                        //iChosen = iClosest;
+                        //isBeingMoved = true;
                     }
                     else
                     {
+                        isTriangleBeingMoved = true;
+                        isChosen = false;
 
                         // Checking whether we're choosing edge - useful?
                         //
@@ -183,40 +170,9 @@ namespace GK_P2_Filling
                         //    {
                         //        isChosen = false;
                         //        iChosen = point.Key;
-                        //        switch (Points[iChosen].NRest)
-                        //        {
-                        //            case 0:
-                        //                NoRestRB.Checked = true;
-                        //                break;
-                        //            case 1:
-                        //                HorizontalRB.Checked = true;
-                        //                break;
-                        //            case 2:
-                        //                VerticalRB.Checked = true;
-                        //                break;
-                        //            case 3:
-                        //                ConstLenRB.Checked = true;
-                        //                break;
-                        //        }
-                        //        isEdgeChosen = true;
-                        //        break;
+                        //        
                         //    }
                         //}
-                        //    if (isEdgeChosen)
-                        //    {
-                        //        NoRestRB.Enabled = true;
-                        //        HorizontalRB.Enabled = true;
-                        //        VerticalRB.Enabled = true;
-                        //        ConstLenRB.Enabled = true;
-                        //        AddVerBut.Enabled = true;
-                        //        DeleteButton.Enabled = false;
-
-                        //    }
-                        //    else
-                        {
-                            isChosen = false;
-                            DeleteButton.Enabled = false;
-                        }
 
                     }
                     WorkspacePictureBox.Refresh();
@@ -224,12 +180,13 @@ namespace GK_P2_Filling
                 }
                 mousePos = e.Location;
             }
+            else if(e.Button == MouseButtons.Right)
+            {
 
-
+            }
+            
         }
-
-
-
+        
         private void SaveButton_Click(object sender, EventArgs e)
         {
 
@@ -247,8 +204,8 @@ namespace GK_P2_Filling
                 {
                     using (StreamWriter sw = new StreamWriter(save.FileName))
                     {
-                        foreach (KeyValuePair<int, MyPoint> point in Points)
-                            sw.WriteLine("{0},{1},{2},{3},{4}", point.Key, point.Value.Loc.X, point.Value.Loc.Y, point.Value.INext, point.Value.IPrev);
+                        //foreach (KeyValuePair<int, MyPoint> point in Points)
+                        //    sw.WriteLine("{0},{1},{2},{3},{4}", point.Key, point.Value.Loc.X, point.Value.Loc.Y, point.Value.INext, point.Value.IPrev);
                     }
                 }
                 catch (Exception ex)
@@ -278,24 +235,23 @@ namespace GK_P2_Filling
                     string word = "";
                     using (StreamReader sr = new StreamReader(open.FileName))
                     {
-                        Points.Clear();
-                        isChosen = false;
-                        isEdgeChosen = false;
-                        iChosen = -1;
-                        WorkspacePictureBox.Image.Dispose();
-                        WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+                        //Points.Clear();
+                        //isChosen = false;
+                        //iChosen = -1;
+                        //WorkspacePictureBox.Image.Dispose();
+                        //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
 
-                        while ((word = sr.ReadLine()) != null)
-                        {
-                            pts = word.Split(',', '\n');
-                            Points.Add(Int32.Parse(pts[0]), new MyPoint(new Point(Int32.Parse(pts[1]), Int32.Parse(pts[2])), Int32.Parse(pts[3]), Int32.Parse(pts[4])));
-                            if (maxKey < Int32.Parse(pts[0]))
-                                maxKey = Int32.Parse(pts[0]);
-                        }
-                        maxKey++;
-                        WorkspacePictureBox.Image.Dispose();
-                        WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                        RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+                        //while ((word = sr.ReadLine()) != null)
+                        //{
+                        //    pts = word.Split(',', '\n');
+                        //    Points.Add(Int32.Parse(pts[0]), new MyPoint(new Point(Int32.Parse(pts[1]), Int32.Parse(pts[2])), Int32.Parse(pts[3]), Int32.Parse(pts[4])));
+                        //    if (maxKey < Int32.Parse(pts[0]))
+                        //        maxKey = Int32.Parse(pts[0]);
+                        //}
+                        //maxKey++;
+                        //WorkspacePictureBox.Image.Dispose();
+                        //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+                        //RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
                     }
                 }
                 catch (Exception ex)
@@ -306,80 +262,31 @@ namespace GK_P2_Filling
             }
             open.Dispose();
         }
-
-        private void ClearButton_Click(object sender, EventArgs e)
-        {
-            Points.Clear();
-            maxKey = 0;
-            iChosen = -1;
-            isChosen = false;
-            isEdgeChosen = false;
-            DeleteButton.Enabled = false;
-            WorkspacePictureBox.Image.Dispose();
-            WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-        }
-
-        // Translating - probably useful
-        //
-        //private void PLButton_Click(object sender, EventArgs e)
-        //{
-        //    Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
-
-        //    ApplyResourceToControl(this, new ComponentResourceManager(typeof(GraphEditor)), new System.Globalization.CultureInfo("pl-PL"));
-
-        //}
-        //private void ApplyResourceToControl(Control control, ComponentResourceManager cmp, System.Globalization.CultureInfo cultureInfo)
-        //{
-        //    foreach (Control child in control.Controls)
-        //    {
-        //        //Store current position and size of the control
-        //        var childSize = child.Size;
-        //        var childLoc = child.Location;
-        //        //Apply CultureInfo to child control
-        //        ApplyResourceToControl(child, cmp, cultureInfo);
-        //        //Restore position and size
-        //        child.Location = childLoc;
-        //        child.Size = childSize;
-        //    }
-        //    //Do the same with the parent control
-        //    var parentSize = control.Size;
-        //    var parentLoc = control.Location;
-        //    cmp.ApplyResources(control, control.Name, cultureInfo);
-        //    control.Location = parentLoc;
-        //    control.Size = parentSize;
-        //}
-
-        //private void ENButton_Click(object sender, EventArgs e)
-        //{
-        //    Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-GB");
-
-        //    ApplyResourceToControl(this, new ComponentResourceManager(typeof(GraphEditor)), new System.Globalization.CultureInfo("en-GB"));
-
-        //}
-
+        
         private void WorkspacePictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
 
-                if (isBeingMoved && isChosen)
+                if (isBeingMoved || isTriangleBeingMoved)   // && isChosen
                 {
                     isBeingMoved = false;
-                    int nX = Points[iChosen].Loc.X;
-                    int nY = Points[iChosen].Loc.Y;
+                    isTriangleBeingMoved = false;
+                    float nX = Points[iChosen].X;
+                    float nY = Points[iChosen].Y;
                     int i = iChosen;
-                    if (Points[iChosen].Loc.X < 0)
+                    if (Points[iChosen].X < 0)
                         nX = -r / 2;
-                    else if (Points[iChosen].Loc.X > WorkspacePictureBox.Width)
+                    else if (Points[iChosen].X > WorkspacePictureBox.Width)
                         nX = WorkspacePictureBox.Width - r / 2;
 
-                    if (Points[iChosen].Loc.Y < 0)
+                    if (Points[iChosen].Y < 0)
                         nY = -r / 2;
-                    else if (Points[iChosen].Loc.Y > WorkspacePictureBox.Height)
+                    else if (Points[iChosen].Y > WorkspacePictureBox.Height)
                         nY = WorkspacePictureBox.Height - r / 2;
 
-                    Points[iChosen].Loc.X = nX;
-                    Points[iChosen].Loc.Y = nY;
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
 
                     mousePos = e.Location;
                     WorkspacePictureBox.Image.Dispose();
@@ -394,21 +301,34 @@ namespace GK_P2_Filling
         private void WorkspacePictureBox_MouseMove(object sender, MouseEventArgs e)
         {
 
-            if (isBeingMoved && isChosen)
+            if (isBeingMoved)
             {
-                int i = iChosen;
-                int nX = Points[iChosen].Loc.X - mousePos.X + e.X;
-                int nY = Points[iChosen].Loc.Y - mousePos.Y + e.Y;
-                Points[iChosen].Loc.X = nX;
-                Points[iChosen].Loc.Y = nY;
-                
+                if (isChosen)
+                {
+                    int i = iChosen;
+                    float nX = Points[iChosen].X - mousePos.X + e.X;
+                    float nY = Points[iChosen].Y - mousePos.Y + e.Y;
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
+                }
+                else if (isTriangleBeingMoved)    // Moving all triangle
+                {
+                    int ind = iChosen < 3 ? 0 : 3;
+                    for (int i = 0; i < Points.Length / 2; i++)
+                    {
+                        Points[i + ind].X = Points[i + ind].X - mousePos.X + e.X;
+                        Points[i + ind].Y = Points[i + ind].Y - mousePos.Y + e.Y;
+                    }
+                }
                 mousePos = e.Location;
+                //UpdateEdges();
+
+                WorkspacePictureBox.Image.Dispose();
+                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+
+                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
             }
 
-            WorkspacePictureBox.Image.Dispose();
-            WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
-            RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
         }
 
 
@@ -479,22 +399,174 @@ namespace GK_P2_Filling
             }
         }
 
+        public void UpdateEdges()
+        {
+            float x1 = Points[0].X, y1 = Points[0].Y;
+            float x2 = Points[1].X, y2 = Points[1].Y;
+            float coef = (x2-x1)/(y2-y1);
+            MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Math.Min(Points[0].X, Points[1].X), coef, null);
+            int iNext;
+            //Head = temp;
+            GET[(int)Math.Min(Points[0].Y, Points[1].Y)] = temp;
+            for (int i = 1; i < Points.Length; i++)
+            {
+                if (i == 2)
+                    iNext = 0;
+                else if (i == 5)
+                    iNext = 3;
+                else
+                    iNext = i + 1;
+
+                x1 = Points[i].X;
+                y1 = Points[i].Y;
+                x2 = Points[iNext].X;
+                y2 = Points[iNext].Y;
+                coef = (x2 - x1) / (y2 - y1);
+                //temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Math.Min(Points[i].X, Points[iNext].X), coef, null);
+
+                int ind = (int)Math.Min(Points[i].Y, Points[iNext].Y);
+                if (Points[i].Y != Points[iNext].Y)
+                {
+                    if (GET[ind] == null)
+                        GET[ind] = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Points[Points[i].Y < Points[iNext].Y ? i : iNext].X, coef, null);
+                    else
+                    {
+                        temp = GET[ind];
+                        while (temp.Next != null)
+                        {
+                            temp = temp.Next;
+                        }
+                        temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Math.Min(Points[i].X, Points[iNext].X), coef, null);
+                    }
+                }
+            }
+            
+        }
+
+        public void FillScanLines()
+        {
+            int y = 0;
+            MyEdge temp = null;
+            UpdateEdges();
+            while (GET[y] != null)
+                y++;
+            AET = null;
+            while ( y < WorkspacePictureBox.Height) // || AET != null ?
+            {
+                // Add lists from y bucket to AET
+                if (GET[y] != null && AET == null)
+                    AET = GET[y];
+                else if (AET != null)
+                {
+                    if (GET[y] != null)
+                    {
+                        temp = AET;
+                        while (temp.Next != null)
+                            temp = temp.Next;
+                        temp.Next = GET[y];
+                    }
+
+
+                    // Sort AET by x
+                    AET = MergeSort(AET);
+
+                    // TO_TEST Remove from AET elems for which y = yMax
+                    temp = AET;
+                    while (temp != null && temp.Next != null)
+                    {
+                        if (temp.Next.YMax <= y)
+                            temp.Next = temp.Next.Next;
+                        temp = temp.Next;
+                    }
+
+                    if (AET.YMax <= y)
+                        AET = AET.Next;
+
+                    if (AET!= null && AET.YMax <= y)
+                        AET = AET.Next;
+
+                    // Fill pixs between crossings
+                    temp = AET;
+                    while (temp != null)
+                    {
+                        for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
+                        {
+                            using (Graphics g = WorkspacePictureBox.CreateGraphics())
+                            {
+                                g.FillRectangle(new SolidBrush(Color.Black), i, y, 1, 1);
+                            }
+                        }
+                        temp = temp.Next.Next;
+                    }
+
+                   
+
+                    // For each edge in AET update x (x+=1/m)
+                    temp = AET;
+                    while (temp != null)
+                    {
+                        temp.XMin += temp.Coefficient;
+                        temp = temp.Next;
+                    }
+                }
+                y++;
+            }
+        }
+
+        public MyEdge MergeSort(MyEdge head)
+        {
+            if (head == null || head.Next == null) { return head; }
+            MyEdge middle = GetMiddle(head);      //get the middle of the list
+            MyEdge sHalf = middle.Next;
+            middle.Next = null;   //split the list into two halfs
+
+            return Merge(MergeSort(head), MergeSort(sHalf));  //recurse on that
+        }
+
+        //Merge subroutine to merge two sorted lists
+        public MyEdge Merge(MyEdge a, MyEdge b)
+        {
+            MyEdge dummyHead = new MyEdge();
+            MyEdge curr = dummyHead;
+            while (a != null && b != null)
+            {
+                // TODO - Shouldn't x be current instead of min?
+                if (a.XMin <= b.XMin) { curr.Next = a; a = a.Next; }
+                else { curr.Next = b; b = b.Next; }
+                curr = curr.Next;
+            }
+            curr.Next = (a == null) ? b : a;
+            return dummyHead.Next;
+        }
+
+        //Finding the middle element of the list for splitting
+        public MyEdge GetMiddle(MyEdge head)
+        {
+            if (head == null) { return head; }
+            MyEdge slow, fast; slow = fast = head;
+            while (fast.Next != null && fast.Next.Next != null)
+            {
+                slow = slow.Next; fast = fast.Next.Next;
+            }
+            return slow;
+        }
+
     }
 
     public class MyPoint
     {
-        public Point Loc;
+        public PointF Loc;
         public int INext { get; set; }      // index of next point
         public int IPrev { get; set; }      // index of previous point
 
         public MyPoint()
         {
-            Loc = new Point();
+            Loc = new PointF();
             INext = -1;
             IPrev = -1;
         }
 
-        public MyPoint(Point _point, int _iNext, int _iPrev)
+        public MyPoint(PointF _point, int _iNext, int _iPrev)
         {
             Loc = _point;
             INext = _iNext;
