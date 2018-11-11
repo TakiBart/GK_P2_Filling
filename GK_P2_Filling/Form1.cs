@@ -17,8 +17,8 @@ namespace GK_P2_Filling
     public partial class Form1 : Form
     {
 
-        public PointF[] Points = new PointF[] { new PointF(3,3), new PointF(200,15), new PointF(15, 200),
-                                                new PointF(400,500), new PointF(80,500), new PointF(200, 100)};
+        public PointF[] Points = new PointF[] { new PointF(3,3), new PointF(40,35), new PointF(35, 40),
+                                                new PointF(250,250), new PointF(200,250), new PointF(220, 210)};
         // First three are first triangle
 
         public MyEdge Head;
@@ -73,32 +73,7 @@ namespace GK_P2_Filling
 
         private void RedrawGraph(Graphics g)
         {
-            Pen pen = new Pen(Color.Black, 3);
-            RectangleF circ = new RectangleF();
-            SolidBrush brush = new SolidBrush(Color.Black);
-            circ.Size = new Size(r, r);
-
-            FillScanLines();
-
-            using (g)
-            {
-
-                //TODO - change drawing
-                //for (int i = 0; i < Points.Length/2; i++)
-                //{
-                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
-                //    {
-                //        {
-                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
-                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
-                //        }
-                //    }
-                //}
-                
-                //WorkspacePictureBox.Refresh();
-            }
-            brush.Dispose();
-            pen.Dispose();
+            WorkspacePictureBox.Refresh();
         }
 
         private void WorkspacePictureBox_SizeChanged(object sender, EventArgs e)
@@ -126,8 +101,6 @@ namespace GK_P2_Filling
                     return;
 
                 Rectangle circ = new Rectangle();
-                //MyPoint closest = Points[0];
-                // #1 ========|v|=========|^|
                 int iClosest = 0;
                 int closestDist = (int)(Math.Pow(Math.Abs(Points[iClosest].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[iClosest].Y + r / 2 - e.Y), 2));
 
@@ -160,20 +133,6 @@ namespace GK_P2_Filling
                     {
                         isTriangleBeingMoved = true;
                         isChosen = false;
-
-                        // Checking whether we're choosing edge - useful?
-                        //
-                        //foreach (KeyValuePair<int, MyPoint> point in Points)
-                        //{
-
-                        //    if (IsOnLine(point.Value.Loc, Points[point.Value.INext].Loc, e.Location, 17))
-                        //    {
-                        //        isChosen = false;
-                        //        iChosen = point.Key;
-                        //        
-                        //    }
-                        //}
-
                     }
                     WorkspacePictureBox.Refresh();
                     RedrawGraph(g);
@@ -186,7 +145,77 @@ namespace GK_P2_Filling
             }
             
         }
-        
+
+        private void WorkspacePictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+
+                if (isBeingMoved || isTriangleBeingMoved)   // && isChosen
+                {
+                    isBeingMoved = false;
+                    isTriangleBeingMoved = false;
+                    float nX = Points[iChosen].X;
+                    float nY = Points[iChosen].Y;
+                    int i = iChosen;
+                    if (Points[iChosen].X < 0)
+                        nX = -r / 2;
+                    else if (Points[iChosen].X > WorkspacePictureBox.Width)
+                        nX = WorkspacePictureBox.Width - r / 2;
+
+                    if (Points[iChosen].Y < 0)
+                        nY = -r / 2;
+                    else if (Points[iChosen].Y > WorkspacePictureBox.Height)
+                        nY = WorkspacePictureBox.Height - r / 2;
+
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
+
+                    mousePos = e.Location;
+                    //WorkspacePictureBox.Image.Dispose();
+                    //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+
+                    WorkspacePictureBox.Refresh();
+                    RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+                }
+                
+            }
+        }
+
+        private void WorkspacePictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            if (isBeingMoved)
+            {
+                if (isChosen)
+                {
+                    int i = iChosen;
+                    float nX = Points[iChosen].X - mousePos.X + e.X;
+                    float nY = Points[iChosen].Y - mousePos.Y + e.Y;
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
+                }
+                else if (isTriangleBeingMoved)    // Moving all triangle
+                {
+                    int ind = iChosen < 3 ? 0 : 3;
+                    for (int i = 0; i < Points.Length / 2; i++)
+                    {
+                        Points[i + ind].X = Points[i + ind].X - mousePos.X + e.X;
+                        Points[i + ind].Y = Points[i + ind].Y - mousePos.Y + e.Y;
+                    }
+                }
+                mousePos = e.Location;
+                //UpdateEdges();
+
+                //WorkspacePictureBox.Image.Dispose();
+                //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+
+                WorkspacePictureBox.Refresh();
+                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+            }
+
+        }
+
         private void SaveButton_Click(object sender, EventArgs e)
         {
 
@@ -261,74 +290,6 @@ namespace GK_P2_Filling
                 }
             }
             open.Dispose();
-        }
-        
-        private void WorkspacePictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-
-                if (isBeingMoved || isTriangleBeingMoved)   // && isChosen
-                {
-                    isBeingMoved = false;
-                    isTriangleBeingMoved = false;
-                    float nX = Points[iChosen].X;
-                    float nY = Points[iChosen].Y;
-                    int i = iChosen;
-                    if (Points[iChosen].X < 0)
-                        nX = -r / 2;
-                    else if (Points[iChosen].X > WorkspacePictureBox.Width)
-                        nX = WorkspacePictureBox.Width - r / 2;
-
-                    if (Points[iChosen].Y < 0)
-                        nY = -r / 2;
-                    else if (Points[iChosen].Y > WorkspacePictureBox.Height)
-                        nY = WorkspacePictureBox.Height - r / 2;
-
-                    Points[iChosen].X = nX;
-                    Points[iChosen].Y = nY;
-
-                    mousePos = e.Location;
-                    WorkspacePictureBox.Image.Dispose();
-                    WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
-                    RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-                }
-                
-            }
-        }
-
-        private void WorkspacePictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-
-            if (isBeingMoved)
-            {
-                if (isChosen)
-                {
-                    int i = iChosen;
-                    float nX = Points[iChosen].X - mousePos.X + e.X;
-                    float nY = Points[iChosen].Y - mousePos.Y + e.Y;
-                    Points[iChosen].X = nX;
-                    Points[iChosen].Y = nY;
-                }
-                else if (isTriangleBeingMoved)    // Moving all triangle
-                {
-                    int ind = iChosen < 3 ? 0 : 3;
-                    for (int i = 0; i < Points.Length / 2; i++)
-                    {
-                        Points[i + ind].X = Points[i + ind].X - mousePos.X + e.X;
-                        Points[i + ind].Y = Points[i + ind].Y - mousePos.Y + e.Y;
-                    }
-                }
-                mousePos = e.Location;
-                //UpdateEdges();
-
-                WorkspacePictureBox.Image.Dispose();
-                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
-                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-            }
-
         }
 
 
@@ -407,6 +368,8 @@ namespace GK_P2_Filling
             MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Math.Min(Points[0].X, Points[1].X), coef, null);
             int iNext;
             //Head = temp;
+            for (int i = 0; i < GET.Length; i++)
+                GET[i] = null; 
             GET[(int)Math.Min(Points[0].Y, Points[1].Y)] = temp;
             for (int i = 1; i < Points.Length; i++)
             {
@@ -465,8 +428,7 @@ namespace GK_P2_Filling
                             temp = temp.Next;
                         temp.Next = GET[y];
                     }
-
-
+                    
                     // Sort AET by x
                     AET = MergeSort(AET);
 
@@ -487,20 +449,19 @@ namespace GK_P2_Filling
 
                     // Fill pixs between crossings
                     temp = AET;
+                    Bitmap bitmap = new Bitmap(WorkspacePictureBox.Image);
                     while (temp != null)
                     {
                         for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
                         {
-                            using (Graphics g = WorkspacePictureBox.CreateGraphics())
-                            {
-                                g.FillRectangle(new SolidBrush(Color.Black), i, y, 1, 1);
-                            }
+                            //using (Graphics g = WorkspacePictureBox.CreateGraphics())
+                            //{
+                            //    //g.FillRectangle(new SolidBrush(Color.Black), i, y, 1, 1);
+                            //}
+                            bitmap.SetPixel(i, y, Color.Black);
                         }
                         temp = temp.Next.Next;
                     }
-
-                   
-
                     // For each edge in AET update x (x+=1/m)
                     temp = AET;
                     while (temp != null)
@@ -551,6 +512,38 @@ namespace GK_P2_Filling
             return slow;
         }
 
+        private void WorkspacePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            Pen pen = new Pen(Color.Black, 3);
+            RectangleF circ = new RectangleF();
+            SolidBrush brush = new SolidBrush(Color.Black);
+            circ.Size = new Size(r, r);
+
+            FillScanLines();
+
+            using (Graphics g = e.Graphics)
+            {
+
+                //TODO - change drawing
+                //for (int i = 0; i < Points.Length/2; i++)
+                //{
+                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
+                //    {
+                //        {
+                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
+                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
+                //        }
+                //    }
+                //}
+
+                //WorkspacePictureBox.Refresh();
+
+                for (int i = 0; i < Points.Length; i++)
+                    g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
+            }
+            brush.Dispose();
+            pen.Dispose();
+        }
     }
 
     public class MyPoint
