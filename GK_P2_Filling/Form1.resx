@@ -198,60 +198,6 @@
   <data name="ImportExportGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
   </data>
-  <data name="OpenButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="OpenButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 57</value>
-  </data>
-  <data name="OpenButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 33</value>
-  </data>
-  <data name="OpenButton.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="OpenButton.Text" xml:space="preserve">
-    <value>Wczytaj</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Name" xml:space="preserve">
-    <value>OpenButton</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Parent" xml:space="preserve">
-    <value>ImportExportGroupBox</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="SaveButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 19</value>
-  </data>
-  <data name="SaveButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 33</value>
-  </data>
-  <data name="SaveButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="SaveButton.Text" xml:space="preserve">
-    <value>Zapisz</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Name" xml:space="preserve">
-    <value>SaveButton</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Parent" xml:space="preserve">
-    <value>ImportExportGroupBox</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="ImportExportGroupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 453</value>
   </data>

@@ -33,14 +33,11 @@
             this.WorkspacePictureBox = new System.Windows.Forms.PictureBox();
             this.EditionGroupBox = new System.Windows.Forms.GroupBox();
             this.ImportExportGroupBox = new System.Windows.Forms.GroupBox();
-            this.OpenButton = new System.Windows.Forms.Button();
-            this.SaveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).BeginInit();
-            this.ImportExportGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -80,24 +77,8 @@
             // ImportExportGroupBox
             // 
             resources.ApplyResources(this.ImportExportGroupBox, "ImportExportGroupBox");
-            this.ImportExportGroupBox.Controls.Add(this.OpenButton);
-            this.ImportExportGroupBox.Controls.Add(this.SaveButton);
             this.ImportExportGroupBox.Name = "ImportExportGroupBox";
             this.ImportExportGroupBox.TabStop = false;
-            // 
-            // OpenButton
-            // 
-            resources.ApplyResources(this.OpenButton, "OpenButton");
-            this.OpenButton.Name = "OpenButton";
-            this.OpenButton.UseVisualStyleBackColor = true;
-            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
-            // 
-            // SaveButton
-            // 
-            resources.ApplyResources(this.SaveButton, "SaveButton");
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.UseVisualStyleBackColor = true;
-            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // Form1
             // 
@@ -112,7 +93,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).EndInit();
-            this.ImportExportGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -121,8 +101,6 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.GroupBox ImportExportGroupBox;
-        private System.Windows.Forms.Button OpenButton;
-        private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.GroupBox EditionGroupBox;
         private System.Windows.Forms.PictureBox WorkspacePictureBox;
     }

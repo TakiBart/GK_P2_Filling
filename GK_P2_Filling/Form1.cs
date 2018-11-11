@@ -37,6 +37,7 @@ namespace GK_P2_Filling
         {
             InitializeComponent();
             WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+            WorkspacePictureBox.Refresh();
             Head = null;
             GET = new MyEdge[WorkspacePictureBox.Height];
             //UpdateEdges();
@@ -73,7 +74,36 @@ namespace GK_P2_Filling
 
         private void RedrawGraph(Graphics g)
         {
-            WorkspacePictureBox.Refresh();
+            //   WorkspacePictureBox.Refresh();
+            Pen pen = new Pen(Color.Black, 3);
+            RectangleF circ = new RectangleF();
+            SolidBrush brush = new SolidBrush(Color.Black);
+            circ.Size = new Size(r, r);
+
+            FillScanLines();
+
+            using (g)
+            {
+
+                //TODO - change drawing
+                //for (int i = 0; i < Points.Length/2; i++)
+                //{
+                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
+                //    {
+                //        {
+                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
+                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
+                //        }
+                //    }
+                //}
+
+                //WorkspacePictureBox.Refresh();
+
+                for (int i = 0; i < Points.Length; i++)
+                    g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
+            }
+            brush.Dispose();
+            pen.Dispose();
         }
 
         private void WorkspacePictureBox_SizeChanged(object sender, EventArgs e)
@@ -215,98 +245,7 @@ namespace GK_P2_Filling
             }
 
         }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-
-            // TODO - UPDATE SAVE & OPEN according to structure of triangles
-
-            SaveFileDialog save = new SaveFileDialog
-            {
-                FileName = "default.graph",
-                Filter = "Graph files (*.graph)|*.graph"
-            };
-
-            if (save.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    using (StreamWriter sw = new StreamWriter(save.FileName))
-                    {
-                        //foreach (KeyValuePair<int, MyPoint> point in Points)
-                        //    sw.WriteLine("{0},{1},{2},{3},{4}", point.Key, point.Value.Loc.X, point.Value.Loc.Y, point.Value.INext, point.Value.IPrev);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(GlobalStrings.SaveErrorMessageBox+$"\n{ex.Message}", "ERROR");
-                    MessageBox.Show("Saving error:\n" + ex.Message, "ERROR");
-                }
-            }
-            save.Dispose();
-
-        }
-
-        private void OpenButton_Click(object sender, EventArgs e)
-        {
-
-            // TODO - UPDATE SAVE & OPEN according to structure of triangles
-
-            OpenFileDialog open = new OpenFileDialog
-            {
-                Filter = "Graph files (*.graph)|*.graph"
-            };
-            if (open.ShowDialog() == DialogResult.OK && File.Exists(open.FileName))
-            {
-                try
-                {
-                    string[] pts = new string[7];
-                    string word = "";
-                    using (StreamReader sr = new StreamReader(open.FileName))
-                    {
-                        //Points.Clear();
-                        //isChosen = false;
-                        //iChosen = -1;
-                        //WorkspacePictureBox.Image.Dispose();
-                        //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
-                        //while ((word = sr.ReadLine()) != null)
-                        //{
-                        //    pts = word.Split(',', '\n');
-                        //    Points.Add(Int32.Parse(pts[0]), new MyPoint(new Point(Int32.Parse(pts[1]), Int32.Parse(pts[2])), Int32.Parse(pts[3]), Int32.Parse(pts[4])));
-                        //    if (maxKey < Int32.Parse(pts[0]))
-                        //        maxKey = Int32.Parse(pts[0]);
-                        //}
-                        //maxKey++;
-                        //WorkspacePictureBox.Image.Dispose();
-                        //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                        //RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(GlobalStrings.OpenErrorMessageBox+"\n" + ex.Message, "ERROR");
-                    MessageBox.Show("Loading error:\n" + ex.Message, "ERROR");
-                }
-            }
-            open.Dispose();
-        }
-
-
-        // Checking whether edge has been chosen - useful?
-        //public bool IsOnLine(Point p1, Point p2, Point p, int width = 1)
-        //{
-        //    bool isOnLine = false;
-        //    using (GraphicsPath path = new GraphicsPath())
-        //    {
-        //        using (var pen = new Pen(Brushes.Black, width))
-        //        {
-        //            path.AddLine(new Point(p1.X + r / 2, p1.Y + r / 2), new Point(p2.X + r / 2, p2.Y + r / 2));
-        //            isOnLine = path.IsOutlineVisible(p, pen);
-        //        }
-        //    }
-        //    return isOnLine;
-        //}
+        
 
         // Drawing string - useful?
         //
@@ -399,7 +338,7 @@ namespace GK_P2_Filling
                         {
                             temp = temp.Next;
                         }
-                        temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Math.Min(Points[i].X, Points[iNext].X), coef, null);
+                        temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Points[Points[i].Y < Points[iNext].Y ? i : iNext].X, coef, null);
                     }
                 }
             }
@@ -411,7 +350,9 @@ namespace GK_P2_Filling
             int y = 0;
             MyEdge temp = null;
             UpdateEdges();
-            while (GET[y] != null)
+            //Bitmap bitmap = new Bitmap(WorkspacePictureBox.Image);
+            Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+            while (GET[y] == null) // There was != - ?
                 y++;
             AET = null;
             while ( y < WorkspacePictureBox.Height) // || AET != null ?
@@ -449,8 +390,8 @@ namespace GK_P2_Filling
 
                     // Fill pixs between crossings
                     temp = AET;
-                    Bitmap bitmap = new Bitmap(WorkspacePictureBox.Image);
-                    while (temp != null)
+                    
+                    while (temp != null && temp.Next != null)
                     {
                         for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
                         {
@@ -472,6 +413,8 @@ namespace GK_P2_Filling
                 }
                 y++;
             }
+            WorkspacePictureBox.Image.Dispose();
+            WorkspacePictureBox.Image = bitmap;
         }
 
         public MyEdge MergeSort(MyEdge head)
@@ -514,35 +457,7 @@ namespace GK_P2_Filling
 
         private void WorkspacePictureBox_Paint(object sender, PaintEventArgs e)
         {
-            Pen pen = new Pen(Color.Black, 3);
-            RectangleF circ = new RectangleF();
-            SolidBrush brush = new SolidBrush(Color.Black);
-            circ.Size = new Size(r, r);
-
-            FillScanLines();
-
-            using (Graphics g = e.Graphics)
-            {
-
-                //TODO - change drawing
-                //for (int i = 0; i < Points.Length/2; i++)
-                //{
-                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
-                //    {
-                //        {
-                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
-                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
-                //        }
-                //    }
-                //}
-
-                //WorkspacePictureBox.Refresh();
-
-                for (int i = 0; i < Points.Length; i++)
-                    g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
-            }
-            brush.Dispose();
-            pen.Dispose();
+            
         }
     }
 
