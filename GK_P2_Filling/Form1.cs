@@ -43,8 +43,7 @@ namespace GK_P2_Filling
         Bitmap objColText;
         Bitmap normVectText;
         Bitmap disturbText;
-
-        Thread Sun;
+        Bitmap bubble;
 
         int iChosen;
         bool isChosen = false;
@@ -71,8 +70,25 @@ namespace GK_P2_Filling
             NormVectTextPB.BackgroundImage = normVectText;
             disturbText = Properties.Resources.brick_normalmap;
             DisturbTextPB.BackgroundImage = disturbText;
+            bubble = new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75));
             FillScanLines();
             
+        }
+        public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        {
+            double ratioX = (double)maxWidth / image.Width;
+            double ratioY = (double)maxHeight / image.Height;
+            double ratio = Math.Min(ratioX, ratioY);
+
+            int newWidth = (int)(image.Width * ratio);
+            int newHeight = (int)(image.Height * ratio);
+
+            Bitmap newImage = new Bitmap(newWidth, newHeight);
+
+            using (Graphics graphics = Graphics.FromImage(newImage))
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+            return newImage;
         }
 
         private void RedrawGraph()
@@ -192,10 +208,11 @@ namespace GK_P2_Filling
                 
             }
         }
+        
 
         private void WorkspacePictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-
+            
             if (isBeingMoved)
             {
                 if (isChosen)
@@ -217,28 +234,12 @@ namespace GK_P2_Filling
                 }
                 mousePos = e.Location;
                 
-                WorkspacePictureBox.Refresh();
+                //WorkspacePictureBox.Refresh();
+
                 FillScanLines();
             }
-
         }
         
-
-        // Drawing string - useful?
-        //
-        //public void DrawString(string s, Point p, Color color)
-        //{
-        //    Graphics g = Graphics.FromImage(WorkspacePictureBox.Image);
-        //    Font drawFont = new Font("Consolas", 10);
-        //    SolidBrush drawBrush = new SolidBrush(color);
-        //    StringFormat drawFormat = new StringFormat();
-        //    g.DrawString(s, drawFont, drawBrush, p, drawFormat);
-        //    drawFont.Dispose();
-        //    drawBrush.Dispose();
-        //    g.Dispose();
-        //}
-
-
         public void UpdateEdges()
         {
             float x1 = Points[0].X, y1 = Points[0].Y;
@@ -291,8 +292,9 @@ namespace GK_P2_Filling
             int R, G, B;
 
             float cosNL;
-            float normVectLen;
             float lighVectLen;
+            float normVectLen;
+            float distLen;
 
             Color objCol;
             Color ligCol = LightColorBoxPB.BackColor;
@@ -354,14 +356,22 @@ namespace GK_P2_Filling
 
                             if(NormalVectTextRB.Checked)
                             {
-                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                // Bąbelek aka "bubble"
+                                if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= 30 * 30)
+                                {
+                                    normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y));
+                                }
+                                else
+                                    normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+
                                 N[2] = normVectCol.B;
                                 N[0] = (normVectCol.R - 127) / N[2];
                                 N[1] = (normVectCol.G - 127) / N[2];
                                 N[2] /= N[2];
                             }
 
-                            if(DisturbTextRB.Checked)
+
+                            if (DisturbTextRB.Checked)
                             {
                                 distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
                                 distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
@@ -370,8 +380,16 @@ namespace GK_P2_Filling
                                 D[0] = 1 * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3;
                                 D[1] = 1 * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
                                 D[2] = -N[0] * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3 - N[1] * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                distLen = (float)Math.Sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
+                                if (distLen != 0)
+                                {
+                                    D[0] /= distLen;
+                                    D[1] /= distLen;
+                                    D[2] /= distLen;
+                                }
                             }
                             
+
                             Np[0] = N[0] + D[0];
                             Np[1] = N[1] + D[1];
                             Np[2] = N[2] + D[2];
@@ -385,7 +403,7 @@ namespace GK_P2_Filling
                             {
                                 L[0] = lightPos[0] - i;
                                 L[1] = lightPos[1] - y;
-                                L[2] = 0.5f;
+                                L[2] = 0.0000005f;
                                 lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
 
                                 L[0] /= lighVectLen;
@@ -393,7 +411,7 @@ namespace GK_P2_Filling
                                 L[2] /= lighVectLen;
                             }
 
-                            cosNL = (float)Math.Cos(Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]);
+                            cosNL = Math.Max(0,(Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]));
 
                             // Normalized (both divided by 255) and denormalized (result multiplied by 255)
                             R = (int)(objCol.R / 255f * ligCol.R * cosNL);
@@ -416,6 +434,7 @@ namespace GK_P2_Filling
             }
             WorkspacePictureBox.Image.Dispose();
             WorkspacePictureBox.Image = bitmap;
+            
         }
 
         public MyEdge MergeSort(MyEdge head)
@@ -597,7 +616,7 @@ namespace GK_P2_Filling
             lightPos[0] = (float)(rad * Math.Cos(angle * Math.PI / 180f)) + WorkspacePictureBox.Width / 2;
             lightPos[1] = (float)(rad * Math.Sin(angle * Math.PI / 180f)) + WorkspacePictureBox.Height / 2;
             if (angle < 360)
-                angle += 10.5f;
+                angle += 10f;
             else
                 angle = 0;
             FillScanLines();
