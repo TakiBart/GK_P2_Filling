@@ -37,10 +37,14 @@ namespace GK_P2_Filling
         // Np - wektor normalny z zaburzeniem
         float[] Np = { 0, 0, 1 };
 
+        // lightPos - położenie źródła światła
+        float[] lightPos = { 0, 0, 1 };
+
         Bitmap objColText;
         Bitmap normVectText;
         Bitmap disturbText;
 
+        Thread Sun;
 
         int iChosen;
         bool isChosen = false;
@@ -48,6 +52,9 @@ namespace GK_P2_Filling
         bool isBeingMoved = false;
         bool isTriangleBeingMoved = false;
         Point mousePos;
+
+        float angle = 0;
+        float rad;
         int r = 10;
         
         
@@ -60,40 +67,15 @@ namespace GK_P2_Filling
             GET = new MyEdge[WorkspacePictureBox.Height];
             objColText = Properties.Resources.brick_normalmap;
             ObjColTextPB.BackgroundImage = objColText;
-
-            //UpdateEdges();
+            normVectText = Properties.Resources.normal_map;
+            NormVectTextPB.BackgroundImage = normVectText;
+            disturbText = Properties.Resources.brick_normalmap;
+            DisturbTextPB.BackgroundImage = disturbText;
+            FillScanLines();
             
-            //Points = {new PointF(3,3), new}
-            //OpenButton_Click(this, new EventArgs());
-            // Default polygon
-            //0,141,96,1,1,4,2
-            //1,248,135,2,3,0,1
-            //2,331,168,3,2,1,3
-            //3,175,192,4,1,2,2
-            //4,240,132,0,2,3,1
-
         }
 
-        // TODO - might be useful
-
-        //private void ColorButton_Click(object sender, EventArgs e)
-        //{
-        //    ColorDialog cd = new ColorDialog();
-
-        //    if (cd.ShowDialog() == DialogResult.OK)
-        //    {
-        //        ColorPictureBox.BackColor = cd.Color;
-        //        if(isChosen)
-        //        {
-        //            int i = Points.IndexOf(chosen);
-        //            Points[i] = chosen;
-
-        //            RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-        //        }
-        //    }
-        //}
-
-        private void RedrawGraph(Graphics g)
+        private void RedrawGraph()
         {
             //   WorkspacePictureBox.Refresh();
             Pen pen = new Pen(Color.Black, 3);
@@ -102,12 +84,7 @@ namespace GK_P2_Filling
             circ.Size = new Size(r, r);
 
             FillScanLines();
-
-            //using (g)
-            //{
-            //    for (int i = 0; i < Points.Length; i++)
-            //        g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
-            //}
+            
             brush.Dispose();
             pen.Dispose();
         }
@@ -119,7 +96,7 @@ namespace GK_P2_Filling
             using (Graphics g = Graphics.FromImage(nIm))
             {
                 g.DrawImage(WorkspacePictureBox.Image, new Point(0, 0));
-                RedrawGraph(g);
+                FillScanLines();
             }
             WorkspacePictureBox.Image.Dispose();
             WorkspacePictureBox.Image = nIm;
@@ -171,7 +148,7 @@ namespace GK_P2_Filling
                         isChosen = false;
                     }
                     WorkspacePictureBox.Refresh();
-                    RedrawGraph(g);
+                    FillScanLines();
                 }
                 mousePos = e.Location;
             }
@@ -208,11 +185,9 @@ namespace GK_P2_Filling
                     Points[iChosen].Y = nY;
 
                     mousePos = e.Location;
-                    //WorkspacePictureBox.Image.Dispose();
-                    //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
+                    
                     WorkspacePictureBox.Refresh();
-                    RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+                    FillScanLines();
                 }
                 
             }
@@ -241,13 +216,9 @@ namespace GK_P2_Filling
                     }
                 }
                 mousePos = e.Location;
-                //UpdateEdges();
-
-                //WorkspacePictureBox.Image.Dispose();
-                //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
+                
                 WorkspacePictureBox.Refresh();
-                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+                FillScanLines();
             }
 
         }
@@ -275,7 +246,7 @@ namespace GK_P2_Filling
             float coef = (x2-x1)/(y2-y1);
             MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Points[Points[0].Y < Points[1].Y ? 0 : 1].X, coef, null);
             int iNext;
-            //Head = temp;
+
             for (int i = 0; i < GET.Length; i++)
                 GET[i] = null; 
             GET[(int)Math.Min(Points[0].Y, Points[1].Y)] = temp;
@@ -321,6 +292,7 @@ namespace GK_P2_Filling
 
             float cosNL;
             float normVectLen;
+            float lighVectLen;
 
             Color objCol;
             Color ligCol = LightColorBoxPB.BackColor;
@@ -332,10 +304,10 @@ namespace GK_P2_Filling
             MyEdge temp = null;
             UpdateEdges();
             Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-            while (GET[y] == null) // There was != - ?
+            while (GET[y] == null) 
                 y++;
             AET = null;
-            while (y < WorkspacePictureBox.Height) // || AET != null ?
+            while (y < WorkspacePictureBox.Height) 
             {
                 // Add lists from y bucket to AET
                 if (GET[y] != null && AET == null)
@@ -378,7 +350,7 @@ namespace GK_P2_Filling
                             if (ObjColConstRB.Checked)
                                 objCol = ColorBoxPB.BackColor;
                             else    // From texture
-                                objCol = objColText.GetPixel(i % (objColText.Width - 1) + 1, y % (objColText.Height - 1) + 1); // TODO - tekstury
+                                objCol = objColText.GetPixel(i % (objColText.Width - 1) + 1, y % (objColText.Height - 1) + 1); 
 
                             if(NormalVectTextRB.Checked)
                             {
@@ -395,9 +367,9 @@ namespace GK_P2_Filling
                                 distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
                                 distNY = disturbText.GetPixel(i % (disturbText.Width), (y + 1) % (disturbText.Height));
 
-                                D[0] = 1 * (distNX.R + distNX.G + distNX.B) / 3;
-                                D[1] = 1 * (distNY.R + distNY.G + distNY.B) / 3;
-                                D[2] = -N[0] * (distNX.R + distNX.G + distNX.B) / 3 - N[1] * (distNY.R + distNY.G + distNY.B) / 3;
+                                D[0] = 1 * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[1] = 1 * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[2] = -N[0] * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3 - N[1] * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
                             }
                             
                             Np[0] = N[0] + D[0];
@@ -409,12 +381,21 @@ namespace GK_P2_Filling
                             Np[1] /= normVectLen;
                             Np[2] /= normVectLen;
 
-                            // TODO - liczenie i wykorzystanie wektora normalnego
-                            // TODO - mapowanie zaburzenia z tekstury
+                            if(LighSourVectAnimRB.Checked) // TODO - jeśli animowane
+                            {
+                                L[0] = lightPos[0] - i;
+                                L[1] = lightPos[1] - y;
+                                L[2] = 0.5f;
+                                lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
 
-                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
+                                L[0] /= lighVectLen;
+                                L[1] /= lighVectLen;
+                                L[2] /= lighVectLen;
+                            }
 
                             cosNL = (float)Math.Cos(Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]);
+
+                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
                             R = (int)(objCol.R / 255f * ligCol.R * cosNL);
                             G = (int)(objCol.G / 255f * ligCol.G * cosNL);
                             B = (int)(objCol.B / 255f * ligCol.B * cosNL);
@@ -490,8 +471,7 @@ namespace GK_P2_Filling
                 {
                     ColorBoxPB.BackColor = cd.Color;
 
-                    RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-
+                    FillScanLines();
                 }
             }
         }
@@ -504,14 +484,14 @@ namespace GK_P2_Filling
             {
                 LightColorBoxPB.BackColor = cd.Color;
 
-                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+                FillScanLines();
 
             }
         }
 
         private void ObjColTextRB_CheckedChanged(object sender, EventArgs e)
         {
-            RedrawGraph(WorkspacePictureBox.CreateGraphics());
+            FillScanLines();
         }
 
         private void DisturbNoRB_CheckedChanged(object sender, EventArgs e)
@@ -523,15 +503,7 @@ namespace GK_P2_Filling
                     D[i] = 0;
                     Np[i] = N[i] / N[2];
                 }
-            }
-        }
-
-        private void DisturbTextRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (DisturbTextRB.Checked)
-            {
-                // TODO - uzupełnianie zaburzenia, uaktualnianie wektora normalnego
-
+                FillScanLines();
             }
         }
 
@@ -547,22 +519,17 @@ namespace GK_P2_Filling
                 for (int i = 0; i < Np.Length; i++)
                     Np[i] = Np[i] / Np[2];
 
+                FillScanLines();
             }
         }
-
-        private void NormalVectTextRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if(NormalVectTextRB.Checked)
-            {
-                // TODO - ustawienie wektora z tekstury i aktualizacja
-            }
-        }
-
+        
         private void LighSourVectConstRB_CheckedChanged(object sender, EventArgs e)
         {
             if (LighSourVectConstRB.Checked)
             {
+                timer1.Stop();
                 L = new float[] { 0, 0, 1 };
+                FillScanLines();
             }
         }
 
@@ -571,6 +538,9 @@ namespace GK_P2_Filling
             if(LighSourVectAnimRB.Checked)
             {
                 // TODO - ustawienie wersora do światła do animowanego
+                lightPos = new float[] { 0.5f, 0.25f, 1 };
+                timer1.Start();
+                FillScanLines();
             }
         }
 
@@ -595,6 +565,7 @@ namespace GK_P2_Filling
             {
                 objColText = OpenImage();
                 ObjColTextPB.BackgroundImage = objColText;
+                FillScanLines();
             }
         }
 
@@ -604,6 +575,7 @@ namespace GK_P2_Filling
             {
                 normVectText = OpenImage();
                 NormVectTextPB.BackgroundImage = normVectText;
+                FillScanLines();
             }
         }
 
@@ -613,7 +585,23 @@ namespace GK_P2_Filling
             {
                 disturbText = OpenImage();
                 DisturbTextPB.BackgroundImage = disturbText;
+                FillScanLines();
             }
+        }
+        
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            rad = Math.Min(WorkspacePictureBox.Height, WorkspacePictureBox.Width) / 3;
+            
+            lightPos[0] = (float)(rad * Math.Cos(angle * Math.PI / 180f)) + WorkspacePictureBox.Width / 2;
+            lightPos[1] = (float)(rad * Math.Sin(angle * Math.PI / 180f)) + WorkspacePictureBox.Height / 2;
+            if (angle < 360)
+                angle += 10.5f;
+            else
+                angle = 0;
+            FillScanLines();
+
         }
     }
 
