@@ -24,14 +24,32 @@ namespace GK_P2_Filling
         public MyEdge Head;
         public MyEdge[] GET;
         public MyEdge AET;
+
+        // D - zaburzenie
+        float[] D = { 0, 0, 0 };
+
+        // L - wersor do światła
+        float[] L = { 0, 0, 1 };
+
+        // N - wektor normalny 
+        float[] N = { 0, 0, 1 };
+
+        // Np - wektor normalny z zaburzeniem
+        float[] Np = { 0, 0, 1 };
+
+        Bitmap objColText;
+        Bitmap normVectText;
+        Bitmap disturbText;
+
+
         int iChosen;
         bool isChosen = false;
-        //bool isEdgeChosen = false;
 
         bool isBeingMoved = false;
         bool isTriangleBeingMoved = false;
         Point mousePos;
         int r = 10;
+        
         
         public Form1()
         {
@@ -40,6 +58,9 @@ namespace GK_P2_Filling
             WorkspacePictureBox.Refresh();
             Head = null;
             GET = new MyEdge[WorkspacePictureBox.Height];
+            objColText = Properties.Resources.brick_normalmap;
+            ObjColTextPB.BackgroundImage = objColText;
+
             //UpdateEdges();
             
             //Points = {new PointF(3,3), new}
@@ -82,26 +103,11 @@ namespace GK_P2_Filling
 
             FillScanLines();
 
-            using (g)
-            {
-
-                //TODO - change drawing
-                //for (int i = 0; i < Points.Length/2; i++)
-                //{
-                //    if (Points[i].X < WorkspacePictureBox.Width && Points[i].Y < WorkspacePictureBox.Height)
-                //    {
-                //        {
-                //            BresenhamLine((int)(Points[i].X + r / 2), (int)(Points[i].Y + r / 2), (int)(Points[(i + 1) % 3].X + r / 2), (int)(Points[(i + 1) % 3].Y + r / 2), pen.Color);
-                //            BresenhamLine((int)(Points[i + Points.Length / 2].X + r / 2), (int)(Points[i + Points.Length / 2].Y + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].X + r / 2), (int)(Points[(i + 1) % 3 + Points.Length / 2].Y + r / 2), pen.Color);
-                //        }
-                //    }
-                //}
-
-                //WorkspacePictureBox.Refresh();
-
-                for (int i = 0; i < Points.Length; i++)
-                    g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
-            }
+            //using (g)
+            //{
+            //    for (int i = 0; i < Points.Length; i++)
+            //        g.DrawEllipse(new Pen(Color.GreenYellow), Points[i].X - r / 2, Points[i].Y - r / 2, 10, 10);
+            //}
             brush.Dispose();
             pen.Dispose();
         }
@@ -261,50 +267,13 @@ namespace GK_P2_Filling
         //    g.Dispose();
         //}
 
-        public void BresenhamLine(int x, int y, int x2, int y2, Color color)
-        {
-            Graphics g = Graphics.FromImage(WorkspacePictureBox.Image);
-            int w = x2 - x;
-            int h = y2 - y;
-            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
-            if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
-            if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
-            if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
-            int longest = Math.Abs(w);
-            int shortest = Math.Abs(h);
-            if (!(longest > shortest))
-            {
-                longest = Math.Abs(h);
-                shortest = Math.Abs(w);
-                if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
-                dx2 = 0;
-            }
-            int numerator = longest >> 1;
-            for (int i = 0; i <= longest; i++)
-            {
-                //putpixel(x, y, color);
-                g.FillRectangle(new SolidBrush(color), x, y, 3, 3);
-                numerator += shortest;
-                if (!(numerator < longest))
-                {
-                    numerator -= longest;
-                    x += dx1;
-                    y += dy1;
-                }
-                else
-                {
-                    x += dx2;
-                    y += dy2;
-                }
-            }
-        }
 
         public void UpdateEdges()
         {
             float x1 = Points[0].X, y1 = Points[0].Y;
             float x2 = Points[1].X, y2 = Points[1].Y;
             float coef = (x2-x1)/(y2-y1);
-            MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Math.Min(Points[0].X, Points[1].X), coef, null);
+            MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Points[Points[0].Y < Points[1].Y ? 0 : 1].X, coef, null);
             int iNext;
             //Head = temp;
             for (int i = 0; i < GET.Length; i++)
@@ -348,14 +317,25 @@ namespace GK_P2_Filling
         public void FillScanLines()
         {
             int y = 0;
+            int R, G, B;
+
+            float cosNL;
+            float normVectLen;
+
+            Color objCol;
+            Color ligCol = LightColorBoxPB.BackColor;
+            Color normVectCol;
+            Color distPix;
+            Color distNX;
+            Color distNY;
+
             MyEdge temp = null;
             UpdateEdges();
-            //Bitmap bitmap = new Bitmap(WorkspacePictureBox.Image);
             Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
             while (GET[y] == null) // There was != - ?
                 y++;
             AET = null;
-            while ( y < WorkspacePictureBox.Height) // || AET != null ?
+            while (y < WorkspacePictureBox.Height) // || AET != null ?
             {
                 // Add lists from y bucket to AET
                 if (GET[y] != null && AET == null)
@@ -395,11 +375,51 @@ namespace GK_P2_Filling
                     {
                         for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
                         {
-                            //using (Graphics g = WorkspacePictureBox.CreateGraphics())
-                            //{
-                            //    //g.FillRectangle(new SolidBrush(Color.Black), i, y, 1, 1);
-                            //}
-                            bitmap.SetPixel(i, y, Color.Black);
+                            if (ObjColConstRB.Checked)
+                                objCol = ColorBoxPB.BackColor;
+                            else    // From texture
+                                objCol = objColText.GetPixel(i % (objColText.Width - 1) + 1, y % (objColText.Height - 1) + 1); // TODO - tekstury
+
+                            if(NormalVectTextRB.Checked)
+                            {
+                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                N[2] = normVectCol.B;
+                                N[0] = (normVectCol.R - 127) / N[2];
+                                N[1] = (normVectCol.G - 127) / N[2];
+                                N[2] /= N[2];
+                            }
+
+                            if(DisturbTextRB.Checked)
+                            {
+                                distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
+                                distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
+                                distNY = disturbText.GetPixel(i % (disturbText.Width), (y + 1) % (disturbText.Height));
+
+                                D[0] = 1 * (distNX.R + distNX.G + distNX.B) / 3;
+                                D[1] = 1 * (distNY.R + distNY.G + distNY.B) / 3;
+                                D[2] = -N[0] * (distNX.R + distNX.G + distNX.B) / 3 - N[1] * (distNY.R + distNY.G + distNY.B) / 3;
+                            }
+                            
+                            Np[0] = N[0] + D[0];
+                            Np[1] = N[1] + D[1];
+                            Np[2] = N[2] + D[2];
+                            normVectLen = (float)Math.Sqrt(Np[0] * Np[0] + Np[1] * Np[1] + Np[2] * Np[2]);
+
+                            Np[0] /= normVectLen;
+                            Np[1] /= normVectLen;
+                            Np[2] /= normVectLen;
+
+                            // TODO - liczenie i wykorzystanie wektora normalnego
+                            // TODO - mapowanie zaburzenia z tekstury
+
+                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
+
+                            cosNL = (float)Math.Cos(Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]);
+                            R = (int)(objCol.R / 255f * ligCol.R * cosNL);
+                            G = (int)(objCol.G / 255f * ligCol.G * cosNL);
+                            B = (int)(objCol.B / 255f * ligCol.B * cosNL);
+
+                            bitmap.SetPixel(i, y, Color.FromArgb(R,G,B));
                         }
                         temp = temp.Next.Next;
                     }
@@ -458,6 +478,142 @@ namespace GK_P2_Filling
         private void WorkspacePictureBox_Paint(object sender, PaintEventArgs e)
         {
             
+        }
+
+        private void ColorBoxPB_Click(object sender, EventArgs e)
+        {
+            if (ObjColConstRB.Checked)
+            {
+                ColorDialog cd = new ColorDialog();
+
+                if (cd.ShowDialog() == DialogResult.OK)
+                {
+                    ColorBoxPB.BackColor = cd.Color;
+
+                    RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+
+                }
+            }
+        }
+
+        private void LightColorBoxPB_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+
+            if (cd.ShowDialog() == DialogResult.OK)
+            {
+                LightColorBoxPB.BackColor = cd.Color;
+
+                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
+
+            }
+        }
+
+        private void ObjColTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            RedrawGraph(WorkspacePictureBox.CreateGraphics());
+        }
+
+        private void DisturbNoRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DisturbNoRB.Checked)
+            {
+                for (int i = 0; i < D.Length; i++)
+                {
+                    D[i] = 0;
+                    Np[i] = N[i] / N[2];
+                }
+            }
+        }
+
+        private void DisturbTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DisturbTextRB.Checked)
+            {
+                // TODO - uzupełnianie zaburzenia, uaktualnianie wektora normalnego
+
+            }
+        }
+
+        private void NormalVectConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if(NormalVectConstRB.Checked)
+            {
+                N = new float[] { 0, 0, 1 };
+
+                for (int i = 0; i<Np.Length; i++)
+                    Np[i] = N[i] + D[i];
+
+                for (int i = 0; i < Np.Length; i++)
+                    Np[i] = Np[i] / Np[2];
+
+            }
+        }
+
+        private void NormalVectTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if(NormalVectTextRB.Checked)
+            {
+                // TODO - ustawienie wektora z tekstury i aktualizacja
+            }
+        }
+
+        private void LighSourVectConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (LighSourVectConstRB.Checked)
+            {
+                L = new float[] { 0, 0, 1 };
+            }
+        }
+
+        private void LighSourVectAnimRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if(LighSourVectAnimRB.Checked)
+            {
+                // TODO - ustawienie wersora do światła do animowanego
+            }
+        }
+
+        public Bitmap OpenImage()
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Title = "Open Image";
+                dlg.Filter = "bmp files (*.bmp)|*.bmp|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    return new Bitmap(dlg.FileName);
+                }
+            }
+            return Properties.Resources.brick_normalmap;
+        }
+
+        private void ObjColTextPB_Click(object sender, EventArgs e)
+        {
+            if (ObjColTextRB.Checked)
+            {
+                objColText = OpenImage();
+                ObjColTextPB.BackgroundImage = objColText;
+            }
+        }
+
+        private void NormVectTextPB_Click(object sender, EventArgs e)
+        {
+            if (NormalVectTextRB.Checked)
+            {
+                normVectText = OpenImage();
+                NormVectTextPB.BackgroundImage = normVectText;
+            }
+        }
+
+        private void DisturbTextPB_Click(object sender, EventArgs e)
+        {
+            if (DisturbTextRB.Checked)
+            {
+                disturbText = OpenImage();
+                DisturbTextPB.BackgroundImage = disturbText;
+            }
         }
     }
 
