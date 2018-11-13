@@ -45,6 +45,13 @@ namespace GK_P2_Filling
             return result;
         }
 
+        public void LoadBitmap(Bitmap bitmap)
+        {
+            for (int i = 0; i < Bitmap.Width; i++)
+                for (int j = 0; j < Bitmap.Height; j++)
+                    SetPixel(i, j, bitmap.GetPixel(i, j));
+        }
+
         public void Dispose()
         {
             if (Disposed) return;

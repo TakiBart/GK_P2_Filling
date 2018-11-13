@@ -40,10 +40,10 @@ namespace GK_P2_Filling
         // lightPos - położenie źródła światła
         float[] lightPos = { 0, 0, 1 };
 
-        Bitmap objColText;
-        Bitmap normVectText;
-        Bitmap disturbText;
-        Bitmap bubble;
+        DirectBitmap objColText;
+        DirectBitmap normVectText;
+        DirectBitmap disturbText;
+        DirectBitmap bubble;
 
         int iChosen;
         bool isChosen = false;
@@ -64,13 +64,17 @@ namespace GK_P2_Filling
             WorkspacePictureBox.Refresh();
             Head = null;
             GET = new MyEdge[WorkspacePictureBox.Height];
-            objColText = Properties.Resources.brick_normalmap;
-            ObjColTextPB.BackgroundImage = objColText;
-            normVectText = Properties.Resources.normal_map;
-            NormVectTextPB.BackgroundImage = normVectText;
-            disturbText = Properties.Resources.brick_normalmap;
-            DisturbTextPB.BackgroundImage = disturbText;
-            bubble = new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75));
+            objColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
+            objColText.LoadBitmap(Properties.Resources.brick_normalmap);
+            ObjColTextPB.BackgroundImage = objColText.Bitmap;
+            normVectText = new DirectBitmap(Properties.Resources.normal_map.Width, Properties.Resources.normal_map.Height);
+            normVectText.LoadBitmap(Properties.Resources.normal_map);
+            NormVectTextPB.BackgroundImage = normVectText.Bitmap;
+            disturbText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
+            disturbText.LoadBitmap(Properties.Resources.brick_normalmap);
+            DisturbTextPB.BackgroundImage = disturbText.Bitmap;
+            bubble = new DirectBitmap(75, 75);
+            bubble.LoadBitmap(new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75)));
             FillScanLines();
             
         }
@@ -399,7 +403,7 @@ namespace GK_P2_Filling
                             Np[1] /= normVectLen;
                             Np[2] /= normVectLen;
 
-                            if(LighSourVectAnimRB.Checked) // TODO - jeśli animowane
+                            if(LighSourVectAnimRB.Checked) 
                             {
                                 L[0] = lightPos[0] - i;
                                 L[1] = lightPos[1] - y;
@@ -556,7 +560,6 @@ namespace GK_P2_Filling
         {
             if(LighSourVectAnimRB.Checked)
             {
-                // TODO - ustawienie wersora do światła do animowanego
                 lightPos = new float[] { 0.5f, 0.25f, 1 };
                 timer1.Start();
                 FillScanLines();
@@ -582,8 +585,9 @@ namespace GK_P2_Filling
         {
             if (ObjColTextRB.Checked)
             {
-                objColText = OpenImage();
-                ObjColTextPB.BackgroundImage = objColText;
+                // TODO
+                objColText.LoadBitmap(OpenImage());
+                ObjColTextPB.BackgroundImage = objColText.Bitmap;
                 FillScanLines();
             }
         }
@@ -592,8 +596,10 @@ namespace GK_P2_Filling
         {
             if (NormalVectTextRB.Checked)
             {
-                normVectText = OpenImage();
-                NormVectTextPB.BackgroundImage = normVectText;
+                //    normVectText = OpenImage();
+                //    NormVectTextPB.BackgroundImage = normVectText;
+                normVectText.LoadBitmap(OpenImage());
+                NormVectTextPB.BackgroundImage = normVectText.Bitmap;
                 FillScanLines();
             }
         }
@@ -602,8 +608,8 @@ namespace GK_P2_Filling
         {
             if (DisturbTextRB.Checked)
             {
-                disturbText = OpenImage();
-                DisturbTextPB.BackgroundImage = disturbText;
+                disturbText.LoadBitmap(OpenImage());
+                DisturbTextPB.BackgroundImage = disturbText.Bitmap;
                 FillScanLines();
             }
         }
