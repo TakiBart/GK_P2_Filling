@@ -28,6 +28,16 @@ namespace GK_P2_Filling
             Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
         }
 
+        public DirectBitmap(Bitmap bitmap)
+        {
+            Width = bitmap.Width;
+            Height = bitmap.Height;
+            Bits = new Int32[Width * Height];
+            BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
+            Bitmap = new Bitmap(Width, Height, Width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
+            LoadBitmap(bitmap);
+        }
+
         public void SetPixel(int x, int y, Color colour)
         {
             int index = x + (y * Width);
@@ -47,8 +57,8 @@ namespace GK_P2_Filling
 
         public void LoadBitmap(Bitmap bitmap)
         {
-            for (int i = 0; i < Bitmap.Width; i++)
-                for (int j = 0; j < Bitmap.Height; j++)
+            for (int i = 0; i < bitmap.Width; i++)
+                for (int j = 0; j < bitmap.Height; j++)
                     SetPixel(i, j, bitmap.GetPixel(i, j));
         }
 

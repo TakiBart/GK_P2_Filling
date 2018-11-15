@@ -33,6 +33,17 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.WorkspacePictureBox = new System.Windows.Forms.PictureBox();
             this.EditionGroupBox = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Triangle1GB = new System.Windows.Forms.GroupBox();
+            this.Tri1ColTextPB = new System.Windows.Forms.PictureBox();
+            this.Tri1ColTextRB = new System.Windows.Forms.RadioButton();
+            this.Tri1ColConstRB = new System.Windows.Forms.RadioButton();
+            this.Tri1ColorBoxPB = new System.Windows.Forms.PictureBox();
+            this.Triangle2GB = new System.Windows.Forms.GroupBox();
+            this.Tri2ColTextPB = new System.Windows.Forms.PictureBox();
+            this.Tri2ColTextRB = new System.Windows.Forms.RadioButton();
+            this.Tri2ColConstRB = new System.Windows.Forms.RadioButton();
+            this.Tri2ColorBoxPB = new System.Windows.Forms.PictureBox();
             this.LighSourVectGB = new System.Windows.Forms.GroupBox();
             this.LighSourVectAnimRB = new System.Windows.Forms.RadioButton();
             this.LighSourVectConstRB = new System.Windows.Forms.RadioButton();
@@ -47,11 +58,6 @@
             this.NormalVectConstRB = new System.Windows.Forms.RadioButton();
             this.LightColorGB = new System.Windows.Forms.GroupBox();
             this.LightColorBoxPB = new System.Windows.Forms.PictureBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ObjColTextPB = new System.Windows.Forms.PictureBox();
-            this.ObjColTextRB = new System.Windows.Forms.RadioButton();
-            this.ObjColConstRB = new System.Windows.Forms.RadioButton();
-            this.ColorBoxPB = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -59,6 +65,13 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).BeginInit();
             this.EditionGroupBox.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.Triangle1GB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColTextPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColorBoxPB)).BeginInit();
+            this.Triangle2GB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColTextPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColorBoxPB)).BeginInit();
             this.LighSourVectGB.SuspendLayout();
             this.NormalVectWDGB.SuspendLayout();
             this.DisturbanceGB.SuspendLayout();
@@ -67,9 +80,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NormVectTextPB)).BeginInit();
             this.LightColorGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LightColorBoxPB)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ObjColTextPB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorBoxPB)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -102,12 +112,104 @@
             // EditionGroupBox
             // 
             resources.ApplyResources(this.EditionGroupBox, "EditionGroupBox");
+            this.EditionGroupBox.Controls.Add(this.groupBox2);
             this.EditionGroupBox.Controls.Add(this.LighSourVectGB);
             this.EditionGroupBox.Controls.Add(this.NormalVectWDGB);
             this.EditionGroupBox.Controls.Add(this.LightColorGB);
-            this.EditionGroupBox.Controls.Add(this.groupBox1);
             this.EditionGroupBox.Name = "EditionGroupBox";
             this.EditionGroupBox.TabStop = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.Triangle1GB);
+            this.groupBox2.Controls.Add(this.Triangle2GB);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.TabStop = false;
+            // 
+            // Triangle1GB
+            // 
+            this.Triangle1GB.Controls.Add(this.Tri1ColTextPB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColTextRB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColConstRB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColorBoxPB);
+            resources.ApplyResources(this.Triangle1GB, "Triangle1GB");
+            this.Triangle1GB.Name = "Triangle1GB";
+            this.Triangle1GB.TabStop = false;
+            // 
+            // Tri1ColTextPB
+            // 
+            this.Tri1ColTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri1ColTextPB, "Tri1ColTextPB");
+            this.Tri1ColTextPB.Name = "Tri1ColTextPB";
+            this.Tri1ColTextPB.TabStop = false;
+            this.Tri1ColTextPB.Click += new System.EventHandler(this.Tri1ColTextPB_Click);
+            // 
+            // Tri1ColTextRB
+            // 
+            resources.ApplyResources(this.Tri1ColTextRB, "Tri1ColTextRB");
+            this.Tri1ColTextRB.Checked = true;
+            this.Tri1ColTextRB.Name = "Tri1ColTextRB";
+            this.Tri1ColTextRB.TabStop = true;
+            this.Tri1ColTextRB.UseVisualStyleBackColor = true;
+            this.Tri1ColTextRB.CheckedChanged += new System.EventHandler(this.Tri1ColTextRB_CheckedChanged);
+            // 
+            // Tri1ColConstRB
+            // 
+            resources.ApplyResources(this.Tri1ColConstRB, "Tri1ColConstRB");
+            this.Tri1ColConstRB.Name = "Tri1ColConstRB";
+            this.Tri1ColConstRB.UseVisualStyleBackColor = true;
+            this.Tri1ColConstRB.CheckedChanged += new System.EventHandler(this.Tri1ColConstRB_CheckedChanged);
+            // 
+            // Tri1ColorBoxPB
+            // 
+            this.Tri1ColorBoxPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri1ColorBoxPB, "Tri1ColorBoxPB");
+            this.Tri1ColorBoxPB.Name = "Tri1ColorBoxPB";
+            this.Tri1ColorBoxPB.TabStop = false;
+            this.Tri1ColorBoxPB.Click += new System.EventHandler(this.Tri1ColorBoxPB_Click);
+            // 
+            // Triangle2GB
+            // 
+            this.Triangle2GB.Controls.Add(this.Tri2ColTextPB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColTextRB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColConstRB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColorBoxPB);
+            resources.ApplyResources(this.Triangle2GB, "Triangle2GB");
+            this.Triangle2GB.Name = "Triangle2GB";
+            this.Triangle2GB.TabStop = false;
+            // 
+            // Tri2ColTextPB
+            // 
+            this.Tri2ColTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri2ColTextPB, "Tri2ColTextPB");
+            this.Tri2ColTextPB.Name = "Tri2ColTextPB";
+            this.Tri2ColTextPB.TabStop = false;
+            this.Tri2ColTextPB.Click += new System.EventHandler(this.ObjColTextPB_Click);
+            // 
+            // Tri2ColTextRB
+            // 
+            resources.ApplyResources(this.Tri2ColTextRB, "Tri2ColTextRB");
+            this.Tri2ColTextRB.Checked = true;
+            this.Tri2ColTextRB.Name = "Tri2ColTextRB";
+            this.Tri2ColTextRB.TabStop = true;
+            this.Tri2ColTextRB.UseVisualStyleBackColor = true;
+            this.Tri2ColTextRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
+            // 
+            // Tri2ColConstRB
+            // 
+            resources.ApplyResources(this.Tri2ColConstRB, "Tri2ColConstRB");
+            this.Tri2ColConstRB.Name = "Tri2ColConstRB";
+            this.Tri2ColConstRB.UseVisualStyleBackColor = true;
+            this.Tri2ColConstRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
+            // 
+            // Tri2ColorBoxPB
+            // 
+            this.Tri2ColorBoxPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri2ColorBoxPB, "Tri2ColorBoxPB");
+            this.Tri2ColorBoxPB.Name = "Tri2ColorBoxPB";
+            this.Tri2ColorBoxPB.TabStop = false;
+            this.Tri2ColorBoxPB.Click += new System.EventHandler(this.ColorBoxPB_Click);
             // 
             // LighSourVectGB
             // 
@@ -220,51 +322,8 @@
             this.LightColorBoxPB.TabStop = false;
             this.LightColorBoxPB.Click += new System.EventHandler(this.LightColorBoxPB_Click);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.ObjColTextPB);
-            this.groupBox1.Controls.Add(this.ObjColTextRB);
-            this.groupBox1.Controls.Add(this.ObjColConstRB);
-            this.groupBox1.Controls.Add(this.ColorBoxPB);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
-            // 
-            // ObjColTextPB
-            // 
-            this.ObjColTextPB.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.ObjColTextPB, "ObjColTextPB");
-            this.ObjColTextPB.Name = "ObjColTextPB";
-            this.ObjColTextPB.TabStop = false;
-            this.ObjColTextPB.Click += new System.EventHandler(this.ObjColTextPB_Click);
-            // 
-            // ObjColTextRB
-            // 
-            resources.ApplyResources(this.ObjColTextRB, "ObjColTextRB");
-            this.ObjColTextRB.Checked = true;
-            this.ObjColTextRB.Name = "ObjColTextRB";
-            this.ObjColTextRB.TabStop = true;
-            this.ObjColTextRB.UseVisualStyleBackColor = true;
-            this.ObjColTextRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
-            // 
-            // ObjColConstRB
-            // 
-            resources.ApplyResources(this.ObjColConstRB, "ObjColConstRB");
-            this.ObjColConstRB.Name = "ObjColConstRB";
-            this.ObjColConstRB.UseVisualStyleBackColor = true;
-            this.ObjColConstRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
-            // 
-            // ColorBoxPB
-            // 
-            this.ColorBoxPB.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.ColorBoxPB, "ColorBoxPB");
-            this.ColorBoxPB.Name = "ColorBoxPB";
-            this.ColorBoxPB.TabStop = false;
-            this.ColorBoxPB.Click += new System.EventHandler(this.ColorBoxPB_Click);
-            // 
             // timer1
             // 
-            this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
@@ -281,6 +340,15 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).EndInit();
             this.EditionGroupBox.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.Triangle1GB.ResumeLayout(false);
+            this.Triangle1GB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColTextPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColorBoxPB)).EndInit();
+            this.Triangle2GB.ResumeLayout(false);
+            this.Triangle2GB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColTextPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColorBoxPB)).EndInit();
             this.LighSourVectGB.ResumeLayout(false);
             this.LighSourVectGB.PerformLayout();
             this.NormalVectWDGB.ResumeLayout(false);
@@ -292,10 +360,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NormVectTextPB)).EndInit();
             this.LightColorGB.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.LightColorBoxPB)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ObjColTextPB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorBoxPB)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -305,10 +369,10 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.GroupBox EditionGroupBox;
         private System.Windows.Forms.PictureBox WorkspacePictureBox;
-        private System.Windows.Forms.PictureBox ColorBoxPB;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton ObjColTextRB;
-        private System.Windows.Forms.RadioButton ObjColConstRB;
+        private System.Windows.Forms.PictureBox Tri2ColorBoxPB;
+        private System.Windows.Forms.GroupBox Triangle2GB;
+        private System.Windows.Forms.RadioButton Tri2ColTextRB;
+        private System.Windows.Forms.RadioButton Tri2ColConstRB;
         private System.Windows.Forms.GroupBox LightColorGB;
         private System.Windows.Forms.PictureBox LightColorBoxPB;
         private System.Windows.Forms.GroupBox NormalVectWDGB;
@@ -323,8 +387,14 @@
         private System.Windows.Forms.RadioButton LighSourVectConstRB;
         private System.Windows.Forms.PictureBox DisturbTextPB;
         private System.Windows.Forms.PictureBox NormVectTextPB;
-        private System.Windows.Forms.PictureBox ObjColTextPB;
+        private System.Windows.Forms.PictureBox Tri2ColTextPB;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox Triangle1GB;
+        private System.Windows.Forms.PictureBox Tri1ColTextPB;
+        private System.Windows.Forms.RadioButton Tri1ColTextRB;
+        private System.Windows.Forms.RadioButton Tri1ColConstRB;
+        private System.Windows.Forms.PictureBox Tri1ColorBoxPB;
     }
 }
 

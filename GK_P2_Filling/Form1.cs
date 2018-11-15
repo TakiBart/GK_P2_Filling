@@ -17,13 +17,14 @@ namespace GK_P2_Filling
     public partial class Form1 : Form
     {
 
-        public PointF[] Points = new PointF[] { new PointF(3,3), new PointF(40,35), new PointF(35, 40),
-                                                new PointF(250,250), new PointF(200,250), new PointF(220, 210)};
+        public PointF[] Points = new PointF[] { new PointF(50,50), new PointF(300,35), new PointF(75, 200),
+                                                new PointF(60,250), new PointF(400,250), new PointF(300, 90)};
         // First three are first triangle
-
-        public MyEdge Head;
+        
         public MyEdge[] GET;
+        public MyEdge[] GET2;
         public MyEdge AET;
+        public MyEdge AET2;
 
         // D - zaburzenie
         float[] D = { 0, 0, 0 };
@@ -40,11 +41,11 @@ namespace GK_P2_Filling
         // lightPos - położenie źródła światła
         float[] lightPos = { 0, 0, 1 };
 
-        DirectBitmap objColText;
+        DirectBitmap tri1ColText;
+        DirectBitmap tri2ColText;
         DirectBitmap normVectText;
         DirectBitmap disturbText;
-        DirectBitmap bubble;
-
+        
         int iChosen;
         bool isChosen = false;
 
@@ -54,7 +55,7 @@ namespace GK_P2_Filling
 
         float angle = 0;
         float rad;
-        int r = 10;
+        int r = 40;
         
         
         public Form1()
@@ -62,19 +63,35 @@ namespace GK_P2_Filling
             InitializeComponent();
             WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
             WorkspacePictureBox.Refresh();
-            Head = null;
+            
             GET = new MyEdge[WorkspacePictureBox.Height];
-            objColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
-            objColText.LoadBitmap(Properties.Resources.brick_normalmap);
-            ObjColTextPB.BackgroundImage = objColText.Bitmap;
-            normVectText = new DirectBitmap(Properties.Resources.normal_map.Width, Properties.Resources.normal_map.Height);
-            normVectText.LoadBitmap(Properties.Resources.normal_map);
+            GET2 = new MyEdge[WorkspacePictureBox.Height];
+
+            //tri1ColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
+            //tri1ColText.LoadBitmap(Properties.Resources.brick_normalmap);
+            tri1ColText = new DirectBitmap(Properties.Resources.brick_normalmap);
+            Tri1ColTextPB.BackgroundImage = tri1ColText.Bitmap;
+
+            //tri2ColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
+            //tri2ColText.LoadBitmap(Properties.Resources.brick_normalmap);
+            tri2ColText = new DirectBitmap(Properties.Resources.normal_map);
+            Tri2ColTextPB.BackgroundImage = tri2ColText.Bitmap;
+
+            //normVectText = new DirectBitmap(Properties.Resources.normal_map.Width, Properties.Resources.normal_map.Height);
+            //normVectText.LoadBitmap(Properties.Resources.normal_map);
+            normVectText = new DirectBitmap(Properties.Resources.normal_map);
             NormVectTextPB.BackgroundImage = normVectText.Bitmap;
-            disturbText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
-            disturbText.LoadBitmap(Properties.Resources.brick_normalmap);
+
+            //disturbText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
+            //disturbText.LoadBitmap(Properties.Resources.brick_normalmap);
+            disturbText = new DirectBitmap(Properties.Resources.brick_normalmap);
             DisturbTextPB.BackgroundImage = disturbText.Bitmap;
-            bubble = new DirectBitmap(75, 75);
-            bubble.LoadBitmap(new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75)));
+
+            //bubble = new DirectBitmap(75, 75);
+            //bubble.LoadBitmap(new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75)));
+
+            timer1.Start();
+
             FillScanLines();
             
         }
@@ -140,8 +157,6 @@ namespace GK_P2_Filling
                 circ.Size = new Size(r, r);
                 using (g)
                 {
-                    // TODO - change chosing vertex
-                    //
                     for(int i = 0; i < Points.Length; i++)
                     {
                         if (Math.Pow(Math.Abs(Points[i].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[i].Y + r / 2 - e.Y), 2) < closestDist)
@@ -172,10 +187,6 @@ namespace GK_P2_Filling
                 }
                 mousePos = e.Location;
             }
-            else if(e.Button == MouseButtons.Right)
-            {
-
-            }
             
         }
 
@@ -183,7 +194,6 @@ namespace GK_P2_Filling
         {
             if (e.Button == MouseButtons.Left)
             {
-
                 if (isBeingMoved || isTriangleBeingMoved)   // && isChosen
                 {
                     isBeingMoved = false;
@@ -237,9 +247,7 @@ namespace GK_P2_Filling
                     }
                 }
                 mousePos = e.Location;
-                
-                //WorkspacePictureBox.Refresh();
-
+              
                 FillScanLines();
             }
         }
@@ -248,29 +256,49 @@ namespace GK_P2_Filling
         {
             float x1 = Points[0].X, y1 = Points[0].Y;
             float x2 = Points[1].X, y2 = Points[1].Y;
-            float coef = (x2-x1)/(y2-y1);
+            float coef = (x2 - x1) / (y2 - y1);
             MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Points[Points[0].Y < Points[1].Y ? 0 : 1].X, coef, null);
             int iNext;
 
+            float x3 = Points[3].X, y3 = Points[3].Y;
+            float x4 = Points[4].X, y4 = Points[4].Y;
+            float coef2 = (x4 - x3) / (y4 - y3);
+            MyEdge temp2 = new MyEdge(Math.Max(Points[3].Y, Points[4].Y), Points[Points[3].Y < Points[4].Y ? 3 : 4].X, coef2, null);
+            int iNext2;
+            
             for (int i = 0; i < GET.Length; i++)
-                GET[i] = null; 
+            {
+                GET[i] = null;
+                GET2[i] = null;
+            }
+
             GET[(int)Math.Min(Points[0].Y, Points[1].Y)] = temp;
-            for (int i = 1; i < Points.Length; i++)
+            GET2[(int)Math.Min(y3, y4)] = temp2;
+
+            for (int i = 1; i < Points.Length/2; i++)
             {
                 if (i == 2)
+                {
                     iNext = 0;
-                else if (i == 5)
-                    iNext = 3;
+                    iNext2 = 3;
+                }
                 else
+                {
                     iNext = i + 1;
-
+                    iNext2 = iNext + 3;
+                }
                 x1 = Points[i].X;
                 y1 = Points[i].Y;
                 x2 = Points[iNext].X;
                 y2 = Points[iNext].Y;
                 coef = (x2 - x1) / (y2 - y1);
-                //temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Math.Min(Points[i].X, Points[iNext].X), coef, null);
-
+                
+                x3 = Points[i+3].X;
+                y3 = Points[i+3].Y;
+                x4 = Points[iNext2].X;
+                y4 = Points[iNext2].Y;
+                coef2 = (x4 - x3) / (y4 - y3);
+                
                 int ind = (int)Math.Min(Points[i].Y, Points[iNext].Y);
                 if (Points[i].Y != Points[iNext].Y)
                 {
@@ -286,8 +314,23 @@ namespace GK_P2_Filling
                         temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Points[Points[i].Y < Points[iNext].Y ? i : iNext].X, coef, null);
                     }
                 }
+
+                int ind2 = (int)Math.Min(Points[i + 3].Y, Points[iNext2].Y);
+                if (Points[i+3].Y != Points[iNext2].Y)
+                {
+                    if (GET2[ind2] == null)
+                        GET2[ind2] = new MyEdge(Math.Max(Points[i+3].Y, Points[iNext2].Y), Points[Points[i+3].Y < Points[iNext2].Y ? i+3 : iNext2].X, coef2, null);
+                    else
+                    {
+                        temp = GET2[ind2];
+                        while (temp.Next != null)
+                        {
+                            temp = temp.Next;
+                        }
+                        temp.Next = new MyEdge(Math.Max(Points[i+3].Y, Points[iNext2].Y), Points[Points[i+3].Y < Points[iNext2].Y ? i+3 : iNext2].X, coef2, null);
+                    }
+                }
             }
-            
         }
 
         public void FillScanLines()
@@ -301,6 +344,7 @@ namespace GK_P2_Filling
             float distLen;
 
             Color objCol;
+            Color objCol2;
             Color ligCol = LightColorBoxPB.BackColor;
             Color normVectCol;
             Color distPix;
@@ -310,9 +354,10 @@ namespace GK_P2_Filling
             MyEdge temp = null;
             UpdateEdges();
             Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-            while (GET[y] == null) 
+            while (GET[y] == null && GET2[y] == null) 
                 y++;
             AET = null;
+            AET2 = null;
             while (y < WorkspacePictureBox.Height) 
             {
                 // Add lists from y bucket to AET
@@ -353,28 +398,45 @@ namespace GK_P2_Filling
                     {
                         for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
                         {
-                            if (ObjColConstRB.Checked)
-                                objCol = ColorBoxPB.BackColor;
+                            if (Tri1ColConstRB.Checked)
+                                objCol = Tri1ColorBoxPB.BackColor;
                             else    // From texture
-                                objCol = objColText.GetPixel(i % (objColText.Width - 1) + 1, y % (objColText.Height - 1) + 1); 
+                                objCol = tri1ColText.GetPixel(i % (tri1ColText.Width - 1) + 1, y % (tri1ColText.Height - 1) + 1);
 
-                            if(NormalVectTextRB.Checked)
+
+                            // Bąbelek aka "bubble"
+                            if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
                             {
-                                // Bąbelek aka "bubble"
-                                if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= 30 * 30)
-                                {
-                                    normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y));
-                                }
-                                else
-                                    normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                //normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y) - 1);
+                                //N[2] = normVectCol.B;
+                                //N[0] = (normVectCol.R - 127) / N[2];
+                                //N[1] = (normVectCol.G - 127) / N[2];
+                                //N[2] /= N[2];
 
+                                // TODO - oblicznie wektorów bąbelka
+                                Point mouse = PointToClient(MousePosition);
+                                N[2] = (float)Math.Sqrt(r*r - Math.Sqrt(i*i+y*y));
+                                N[0] = (i - mouse.X) / N[2];
+                                N[1] = (y - mouse.Y) / N[2];
+                                N[2] /= N[2];
+
+
+                            }
+                            else if (NormalVectTextRB.Checked)
+                            {
+                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
                                 N[2] = normVectCol.B;
                                 N[0] = (normVectCol.R - 127) / N[2];
                                 N[1] = (normVectCol.G - 127) / N[2];
                                 N[2] /= N[2];
                             }
-
-
+                            else
+                                N = new float[] { 0, 0, 1 };
+                            
+                            // TODO - liczenie bąbelka
+                            // TODO - bąbelek, gdy stały wektor normalny
+                            // TODO - oddzielny kolor/tekstura dla każdego trójkąta
+                            
                             if (DisturbTextRB.Checked)
                             {
                                 distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
@@ -407,7 +469,7 @@ namespace GK_P2_Filling
                             {
                                 L[0] = lightPos[0] - i;
                                 L[1] = lightPos[1] - y;
-                                L[2] = 0.0000005f;
+                                L[2] = 100f;
                                 lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
 
                                 L[0] /= lighVectLen;
@@ -428,6 +490,141 @@ namespace GK_P2_Filling
                     }
                     // For each edge in AET update x (x+=1/m)
                     temp = AET;
+                    while (temp != null)
+                    {
+                        temp.XMin += temp.Coefficient;
+                        temp = temp.Next;
+                    }
+                }
+
+                // TRIANGLE no 2
+                temp = null;
+                // Add lists from y bucket to AET
+                if (GET2[y] != null && AET2 == null)
+                    AET2 = GET2[y];
+                else if (AET2 != null)
+                {
+                    if (GET2[y] != null)
+                    {
+                        temp = AET2;
+                        while (temp.Next != null)
+                            temp = temp.Next;
+                        temp.Next = GET2[y];
+                    }
+
+                    // Sort AET by x
+                    AET2 = MergeSort(AET2);
+
+                    // TO_TEST Remove from AET elems for which y = yMax
+                    temp = AET2;
+                    while (temp != null && temp.Next != null)
+                    {
+                        if (temp.Next.YMax <= y)
+                            temp.Next = temp.Next.Next;
+                        temp = temp.Next;
+                    }
+
+                    if (AET2.YMax <= y)
+                        AET2 = AET2.Next;
+
+                    if (AET2 != null && AET2.YMax <= y)
+                        AET2 = AET2.Next;
+
+                    // Fill pixs between crossings
+                    temp = AET2;
+
+                    while (temp != null && temp.Next != null)
+                    {
+                        for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
+                        {
+                            if (Tri2ColConstRB.Checked)
+                                objCol2 = Tri2ColorBoxPB.BackColor;
+                            else    // From texture
+                                objCol2 = tri2ColText.GetPixel(i % (tri2ColText.Width - 1) + 1, y % (tri2ColText.Height - 1) + 1);
+
+
+                            // Bąbelek aka "bubble"
+                            if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
+                            {
+                                //normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y) - 1);
+                                //N[2] = normVectCol.B;
+                                //N[0] = (normVectCol.R - 127) / N[2];
+                                //N[1] = (normVectCol.G - 127) / N[2];
+                                //N[2] /= N[2];
+
+                                // TODO - oblicznie wektorów bąbelka
+                                Point mouse = PointToClient(MousePosition);
+
+                                N[2] = (float)Math.Sqrt(r * r - Math.Sqrt(i * i + y * y));
+                                N[0] = (i - mouse.X) / N[2];
+                                N[1] = (y - mouse.Y) / N[2];
+                                N[2] /= N[2];
+
+                            }
+                            else if (NormalVectTextRB.Checked)
+                            {
+                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                N[2] = normVectCol.B;
+                                N[0] = (normVectCol.R - 127) / N[2];
+                                N[1] = (normVectCol.G - 127) / N[2];
+                                N[2] /= N[2];
+                            }
+                            else
+                                N = new float[] { 0, 0, 1 };
+                            
+                            if (DisturbTextRB.Checked)
+                            {
+                                distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
+                                distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
+                                distNY = disturbText.GetPixel(i % (disturbText.Width), (y + 1) % (disturbText.Height));
+
+                                D[0] = 1 * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[1] = 1 * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[2] = -N[0] * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3 - N[1] * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                distLen = (float)Math.Sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
+                                if (distLen != 0)
+                                {
+                                    D[0] /= distLen;
+                                    D[1] /= distLen;
+                                    D[2] /= distLen;
+                                }
+                            }
+
+
+                            Np[0] = N[0] + D[0];
+                            Np[1] = N[1] + D[1];
+                            Np[2] = N[2] + D[2];
+                            normVectLen = (float)Math.Sqrt(Np[0] * Np[0] + Np[1] * Np[1] + Np[2] * Np[2]);
+
+                            Np[0] /= normVectLen;
+                            Np[1] /= normVectLen;
+                            Np[2] /= normVectLen;
+
+                            if (LighSourVectAnimRB.Checked)
+                            {
+                                L[0] = lightPos[0] - i;
+                                L[1] = lightPos[1] - y;
+                                L[2] = 100f;
+                                lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
+
+                                L[0] /= lighVectLen;
+                                L[1] /= lighVectLen;
+                                L[2] /= lighVectLen;
+                            }
+
+                            cosNL = Math.Max(0, (Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]));
+
+                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
+                            R = (int)(objCol2.R / 255f * ligCol.R * cosNL);
+                            G = (int)(objCol2.G / 255f * ligCol.G * cosNL);
+                            B = (int)(objCol2.B / 255f * ligCol.B * cosNL);
+
+                            bitmap.SetPixel(i, y, Color.FromArgb(R, G, B));
+                        }
+                        temp = temp.Next.Next;
+                    }
+                    // For each edge in AET update x (x+=1/m)
+                    temp = AET2;
                     while (temp != null)
                     {
                         temp.XMin += temp.Coefficient;
@@ -484,15 +681,30 @@ namespace GK_P2_Filling
             
         }
 
-        private void ColorBoxPB_Click(object sender, EventArgs e)
+        private void Tri1ColorBoxPB_Click(object sender, EventArgs e)
         {
-            if (ObjColConstRB.Checked)
+            if (Tri1ColConstRB.Checked)
             {
                 ColorDialog cd = new ColorDialog();
 
                 if (cd.ShowDialog() == DialogResult.OK)
                 {
-                    ColorBoxPB.BackColor = cd.Color;
+                    Tri1ColorBoxPB.BackColor = cd.Color;
+
+                    FillScanLines();
+                }
+            }
+        }
+
+        private void ColorBoxPB_Click(object sender, EventArgs e)
+        {
+            if (Tri2ColConstRB.Checked)
+            {
+                ColorDialog cd = new ColorDialog();
+
+                if (cd.ShowDialog() == DialogResult.OK)
+                {
+                    Tri2ColorBoxPB.BackColor = cd.Color;
 
                     FillScanLines();
                 }
@@ -512,10 +724,17 @@ namespace GK_P2_Filling
             }
         }
 
-        private void ObjColTextRB_CheckedChanged(object sender, EventArgs e)
+        private void Tri1ColTextRB_CheckedChanged(object sender, EventArgs e)
         {
             FillScanLines();
         }
+
+        private void ObjColTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            // Triangle no 2
+            FillScanLines();
+        }
+        
 
         private void DisturbNoRB_CheckedChanged(object sender, EventArgs e)
         {
@@ -550,7 +769,7 @@ namespace GK_P2_Filling
         {
             if (LighSourVectConstRB.Checked)
             {
-                timer1.Stop();
+                //timer1.Stop();
                 L = new float[] { 0, 0, 1 };
                 FillScanLines();
             }
@@ -561,7 +780,7 @@ namespace GK_P2_Filling
             if(LighSourVectAnimRB.Checked)
             {
                 lightPos = new float[] { 0.5f, 0.25f, 1 };
-                timer1.Start();
+                //timer1.Start();
                 FillScanLines();
             }
         }
@@ -580,17 +799,32 @@ namespace GK_P2_Filling
             }
             return Properties.Resources.brick_normalmap;
         }
-
-        private void ObjColTextPB_Click(object sender, EventArgs e)
+        
+        private void Tri1ColTextPB_Click(object sender, EventArgs e)
         {
-            if (ObjColTextRB.Checked)
+            if (Tri1ColTextRB.Checked)
             {
-                // TODO
-                objColText.LoadBitmap(OpenImage());
-                ObjColTextPB.BackgroundImage = objColText.Bitmap;
+                tri1ColText = new DirectBitmap(new Bitmap(ScaleImage(OpenImage(), WorkspacePictureBox.Width,WorkspacePictureBox.Height)));
+                Tri1ColTextPB.BackgroundImage = tri1ColText.Bitmap;
                 FillScanLines();
             }
         }
+
+        private void ObjColTextPB_Click(object sender, EventArgs e)
+        {
+            if (Tri2ColTextRB.Checked)
+            {
+                tri2ColText = new DirectBitmap(OpenImage());
+                Tri2ColTextPB.BackgroundImage = tri2ColText.Bitmap;
+                FillScanLines();
+            }
+        }
+
+        private void Tri1ColConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            FillScanLines();
+        }
+
 
         private void NormVectTextPB_Click(object sender, EventArgs e)
         {
@@ -598,7 +832,8 @@ namespace GK_P2_Filling
             {
                 //    normVectText = OpenImage();
                 //    NormVectTextPB.BackgroundImage = normVectText;
-                normVectText.LoadBitmap(OpenImage());
+                //normVectText.LoadBitmap(OpenImage());
+                normVectText = new DirectBitmap(OpenImage());
                 NormVectTextPB.BackgroundImage = normVectText.Bitmap;
                 FillScanLines();
             }
@@ -608,7 +843,8 @@ namespace GK_P2_Filling
         {
             if (DisturbTextRB.Checked)
             {
-                disturbText.LoadBitmap(OpenImage());
+                //disturbText.LoadBitmap(OpenImage());
+                disturbText = new DirectBitmap(OpenImage());
                 DisturbTextPB.BackgroundImage = disturbText.Bitmap;
                 FillScanLines();
             }
@@ -618,16 +854,19 @@ namespace GK_P2_Filling
         private void timer1_Tick(object sender, EventArgs e)
         {
             rad = Math.Min(WorkspacePictureBox.Height, WorkspacePictureBox.Width) / 3;
-            
-            lightPos[0] = (float)(rad * Math.Cos(angle * Math.PI / 180f)) + WorkspacePictureBox.Width / 2;
-            lightPos[1] = (float)(rad * Math.Sin(angle * Math.PI / 180f)) + WorkspacePictureBox.Height / 2;
-            if (angle < 360)
-                angle += 10f;
-            else
-                angle = 0;
+            if (LighSourVectAnimRB.Checked)
+            {
+                lightPos[0] = (float)(rad * Math.Cos(angle * Math.PI / 180f)) + WorkspacePictureBox.Width / 2;
+                lightPos[1] = (float)(rad * Math.Sin(angle * Math.PI / 180f)) + WorkspacePictureBox.Height / 2;
+                if (angle < 360)
+                    angle += 10f;
+                else
+                    angle = 0;
+            }
             FillScanLines();
 
         }
+
     }
 
     public class MyPoint
@@ -651,25 +890,5 @@ namespace GK_P2_Filling
         }
     }
 
-    public static class Prompt
-    {
-        // TODO - adjust to show "bubble"
-        //
-        public static double ShowDialog(string text, string caption, double length)
-        {
-            Form prompt = new Form();
-            prompt.Width = 300;
-            prompt.Height = 150;
-            prompt.Text = caption;
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            NumericUpDown inputBox = new NumericUpDown() { Left = 50, Top = 50, Width = 200, Minimum = 1, Maximum = 9999, Value = (decimal)length };
-            Button confirmation = new Button() { Text = "Ok", Left = 150, Width = 100, Top = 70 };
-            confirmation.Click += (sender, e) => { prompt.Close(); };
-            prompt.Controls.Add(confirmation);
-            prompt.Controls.Add(textLabel);
-            prompt.Controls.Add(inputBox);
-            prompt.ShowDialog();
-            return Decimal.ToDouble(inputBox.Value);
-        }
-    }
+    
 }
