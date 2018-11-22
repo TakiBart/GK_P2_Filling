@@ -66,30 +66,19 @@ namespace GK_P2_Filling
             
             GET = new MyEdge[WorkspacePictureBox.Height];
             GET2 = new MyEdge[WorkspacePictureBox.Height];
-
-            //tri1ColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
-            //tri1ColText.LoadBitmap(Properties.Resources.brick_normalmap);
+            
             tri1ColText = new DirectBitmap(Properties.Resources.brick_normalmap);
             Tri1ColTextPB.BackgroundImage = tri1ColText.Bitmap;
-
-            //tri2ColText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
-            //tri2ColText.LoadBitmap(Properties.Resources.brick_normalmap);
+            
             tri2ColText = new DirectBitmap(Properties.Resources.normal_map);
             Tri2ColTextPB.BackgroundImage = tri2ColText.Bitmap;
-
-            //normVectText = new DirectBitmap(Properties.Resources.normal_map.Width, Properties.Resources.normal_map.Height);
-            //normVectText.LoadBitmap(Properties.Resources.normal_map);
+            
             normVectText = new DirectBitmap(Properties.Resources.normal_map);
             NormVectTextPB.BackgroundImage = normVectText.Bitmap;
-
-            //disturbText = new DirectBitmap(Properties.Resources.brick_normalmap.Width, Properties.Resources.brick_normalmap.Height);
-            //disturbText.LoadBitmap(Properties.Resources.brick_normalmap);
+            
             disturbText = new DirectBitmap(Properties.Resources.brick_normalmap);
             DisturbTextPB.BackgroundImage = disturbText.Bitmap;
-
-            //bubble = new DirectBitmap(75, 75);
-            //bubble.LoadBitmap(new Bitmap(ScaleImage(Properties.Resources.normal_map, 75, 75)));
-
+            
             timer1.Start();
 
             FillScanLines();
@@ -403,24 +392,16 @@ namespace GK_P2_Filling
                             else    // From texture
                                 objCol = tri1ColText.GetPixel(i % (tri1ColText.Width - 1) + 1, y % (tri1ColText.Height - 1) + 1);
 
+                            Point mouse = PointToClient(MousePosition);
 
                             // Bąbelek aka "bubble"
                             if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
                             {
-                                //normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y) - 1);
-                                //N[2] = normVectCol.B;
-                                //N[0] = (normVectCol.R - 127) / N[2];
-                                //N[1] = (normVectCol.G - 127) / N[2];
-                                //N[2] /= N[2];
-
-                                // TODO - oblicznie wektorów bąbelka
-                                Point mouse = PointToClient(MousePosition);
+                                // Oblicznie wektorów bąbelka
                                 N[2] = (float)Math.Sqrt(r*r - Math.Sqrt(i*i+y*y));
                                 N[0] = (i - mouse.X) / N[2];
                                 N[1] = (y - mouse.Y) / N[2];
                                 N[2] /= N[2];
-
-
                             }
                             else if (NormalVectTextRB.Checked)
                             {
@@ -432,10 +413,6 @@ namespace GK_P2_Filling
                             }
                             else
                                 N = new float[] { 0, 0, 1 };
-                            
-                            // TODO - liczenie bąbelka
-                            // TODO - bąbelek, gdy stały wektor normalny
-                            // TODO - oddzielny kolor/tekstura dla każdego trójkąta
                             
                             if (DisturbTextRB.Checked)
                             {
@@ -455,7 +432,6 @@ namespace GK_P2_Filling
                                 }
                             }
                             
-
                             Np[0] = N[0] + D[0];
                             Np[1] = N[1] + D[1];
                             Np[2] = N[2] + D[2];
@@ -497,7 +473,7 @@ namespace GK_P2_Filling
                     }
                 }
 
-                // TRIANGLE no 2
+                // TRIANGLE no 2, not DRY
                 temp = null;
                 // Add lists from y bucket to AET
                 if (GET2[y] != null && AET2 == null)
@@ -546,13 +522,6 @@ namespace GK_P2_Filling
                             // Bąbelek aka "bubble"
                             if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
                             {
-                                //normVectCol = bubble.GetPixel(bubble.Width / 2 + (i - PointToClient(MousePosition).X), bubble.Height / 2 + (y - PointToClient(MousePosition).Y) - 1);
-                                //N[2] = normVectCol.B;
-                                //N[0] = (normVectCol.R - 127) / N[2];
-                                //N[1] = (normVectCol.G - 127) / N[2];
-                                //N[2] /= N[2];
-
-                                // TODO - oblicznie wektorów bąbelka
                                 Point mouse = PointToClient(MousePosition);
 
                                 N[2] = (float)Math.Sqrt(r * r - Math.Sqrt(i * i + y * y));
@@ -655,7 +624,6 @@ namespace GK_P2_Filling
             MyEdge curr = dummyHead;
             while (a != null && b != null)
             {
-                // TODO - Shouldn't x be current instead of min?
                 if (a.XMin <= b.XMin) { curr.Next = a; a = a.Next; }
                 else { curr.Next = b; b = b.Next; }
                 curr = curr.Next;
@@ -769,7 +737,6 @@ namespace GK_P2_Filling
         {
             if (LighSourVectConstRB.Checked)
             {
-                //timer1.Stop();
                 L = new float[] { 0, 0, 1 };
                 FillScanLines();
             }
@@ -780,7 +747,6 @@ namespace GK_P2_Filling
             if(LighSourVectAnimRB.Checked)
             {
                 lightPos = new float[] { 0.5f, 0.25f, 1 };
-                //timer1.Start();
                 FillScanLines();
             }
         }
@@ -830,9 +796,6 @@ namespace GK_P2_Filling
         {
             if (NormalVectTextRB.Checked)
             {
-                //    normVectText = OpenImage();
-                //    NormVectTextPB.BackgroundImage = normVectText;
-                //normVectText.LoadBitmap(OpenImage());
                 normVectText = new DirectBitmap(OpenImage());
                 NormVectTextPB.BackgroundImage = normVectText.Bitmap;
                 FillScanLines();
@@ -843,7 +806,6 @@ namespace GK_P2_Filling
         {
             if (DisturbTextRB.Checked)
             {
-                //disturbText.LoadBitmap(OpenImage());
                 disturbText = new DirectBitmap(OpenImage());
                 DisturbTextPB.BackgroundImage = disturbText.Bitmap;
                 FillScanLines();
@@ -867,28 +829,9 @@ namespace GK_P2_Filling
 
         }
 
-    }
-
-    public class MyPoint
-    {
-        public PointF Loc;
-        public int INext { get; set; }      // index of next point
-        public int IPrev { get; set; }      // index of previous point
-
-        public MyPoint()
+        private void ReflectorCB_CheckedChanged(object sender, EventArgs e)
         {
-            Loc = new PointF();
-            INext = -1;
-            IPrev = -1;
-        }
-
-        public MyPoint(PointF _point, int _iNext, int _iPrev)
-        {
-            Loc = _point;
-            INext = _iNext;
-            IPrev = _iPrev;
+            FillScanLines();
         }
     }
-
-    
 }

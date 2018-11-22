@@ -468,6 +468,33 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="ReflectorCB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ReflectorCB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 20</value>
+  </data>
+  <data name="ReflectorCB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 17</value>
+  </data>
+  <data name="ReflectorCB.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="ReflectorCB.Text" xml:space="preserve">
+    <value>Śledzący</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Name" xml:space="preserve">
+    <value>ReflectorCB</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="LighSourVectAnimRB.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -496,7 +523,7 @@
     <value>LighSourVectGB</value>
   </data>
   <data name="&gt;&gt;LighSourVectAnimRB.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="LighSourVectConstRB.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -523,7 +550,7 @@
     <value>LighSourVectGB</value>
   </data>
   <data name="&gt;&gt;LighSourVectConstRB.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="LighSourVectGB.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 474</value>
