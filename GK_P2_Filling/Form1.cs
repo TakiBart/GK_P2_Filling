@@ -17,7 +17,7 @@ namespace GK_P2_Filling
     public partial class Form1 : Form
     {
 
-        public PointF[] Points = new PointF[] { new PointF(50,50), new PointF(300,35), new PointF(75, 200),
+        public PointF[] Points = new PointF[] { new PointF(50,50), new PointF(300,35), new PointF(75, 400),
                                                 new PointF(60,250), new PointF(400,250), new PointF(300, 90)};
         // First three are first triangle
         
@@ -56,8 +56,10 @@ namespace GK_P2_Filling
         float angle = 0;
         float rad;
         int r = 40;
-        
-        
+        int refHeight = 200;
+        int K = 100;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -331,6 +333,14 @@ namespace GK_P2_Filling
             float lighVectLen;
             float normVectLen;
             float distLen;
+            float refVectLen;
+            float refPointVectLen;
+            float cosVrVp;
+
+            float[] Vr = new float[3];
+            float[] Vp = new float[3];
+
+            Point RefPos = new Point(WorkspacePictureBox.Image.Width / 2, WorkspacePictureBox.Image.Height / 2);
 
             Color objCol;
             Color objCol2;
@@ -343,6 +353,7 @@ namespace GK_P2_Filling
             MyEdge temp = null;
             UpdateEdges();
             Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+
             while (GET[y] == null && GET2[y] == null) 
                 y++;
             AET = null;
@@ -395,7 +406,7 @@ namespace GK_P2_Filling
                             Point mouse = PointToClient(MousePosition);
 
                             // Bąbelek aka "bubble"
-                            if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
+                            if (BubbleCB.Checked && (i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
                             {
                                 // Oblicznie wektorów bąbelka
                                 N[2] = (float)Math.Sqrt(r*r - Math.Sqrt(i*i+y*y));
@@ -460,6 +471,34 @@ namespace GK_P2_Filling
                             G = (int)(objCol.G / 255f * ligCol.G * cosNL);
                             B = (int)(objCol.B / 255f * ligCol.B * cosNL);
 
+                            if (ReflectorCB.Checked)
+                            {
+                                Vr[0] = mouse.X - RefPos.X;
+                                Vr[1] = mouse.Y - RefPos.Y;
+                                Vr[2] = refHeight;
+                                refVectLen = (float)Math.Sqrt(Vr[0] * Vr[0] + Vr[1] * Vr[1] + Vr[2] * Vr[2]);
+                                Vr[0] /= refVectLen;
+                                Vr[1] /= refVectLen;
+                                Vr[2] /= refVectLen;
+
+                                Vp[0] = i - RefPos.X;
+                                Vp[1] = y - RefPos.Y;
+                                Vp[2] = refHeight;
+                                refPointVectLen = (float)Math.Sqrt(Vp[0] * Vp[0] + Vp[1] * Vp[1] + Vp[2] * Vp[2]);
+                                Vp[0] /= refPointVectLen;
+                                Vp[1] /= refPointVectLen;
+                                Vp[2] /= refPointVectLen;
+
+                                cosVrVp = Vr[0] * Vp[0] + Vr[1] * Vp[1] + Vr[2] * Vp[2];
+                                cosVrVp = (float)Math.Pow(cosVrVp, K);
+                                R = (int)(R * (1+cosVrVp));
+                                G = (int)(G * (1+cosVrVp));
+                                B = (int)(B * (1+cosVrVp));
+                                if (R > 255) R = 255;
+                                if (G > 255) G = 255;
+                                if (B > 255) B = 255;
+                            }
+
                             bitmap.SetPixel(i, y, Color.FromArgb(R,G,B));
                         }
                         temp = temp.Next.Next;
@@ -518,11 +557,11 @@ namespace GK_P2_Filling
                             else    // From texture
                                 objCol2 = tri2ColText.GetPixel(i % (tri2ColText.Width - 1) + 1, y % (tri2ColText.Height - 1) + 1);
 
-
+                            Point mouse = PointToClient(MousePosition);
                             // Bąbelek aka "bubble"
-                            if ((i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
+                            if (BubbleCB.Checked && (i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
                             {
-                                Point mouse = PointToClient(MousePosition);
+                               
 
                                 N[2] = (float)Math.Sqrt(r * r - Math.Sqrt(i * i + y * y));
                                 N[0] = (i - mouse.X) / N[2];
@@ -587,6 +626,35 @@ namespace GK_P2_Filling
                             R = (int)(objCol2.R / 255f * ligCol.R * cosNL);
                             G = (int)(objCol2.G / 255f * ligCol.G * cosNL);
                             B = (int)(objCol2.B / 255f * ligCol.B * cosNL);
+
+
+                            if (ReflectorCB.Checked)
+                            {
+                                Vr[0] = mouse.X - RefPos.X;
+                                Vr[1] = mouse.Y - RefPos.Y;
+                                Vr[2] = refHeight;
+                                refVectLen = (float)Math.Sqrt(Vr[0] * Vr[0] + Vr[1] * Vr[1] + Vr[2] * Vr[2]);
+                                Vr[0] /= refVectLen;
+                                Vr[1] /= refVectLen;
+                                Vr[2] /= refVectLen;
+
+                                Vp[0] = i - RefPos.X;
+                                Vp[1] = y - RefPos.Y;
+                                Vp[2] = refHeight;
+                                refPointVectLen = (float)Math.Sqrt(Vp[0] * Vp[0] + Vp[1] * Vp[1] + Vp[2] * Vp[2]);
+                                Vp[0] /= refPointVectLen;
+                                Vp[1] /= refPointVectLen;
+                                Vp[2] /= refPointVectLen;
+
+                                cosVrVp = Vr[0] * Vp[0] + Vr[1] * Vp[1] + Vr[2] * Vp[2];
+                                cosVrVp = (float)Math.Pow(cosVrVp, K);
+                                R = (int)(R * (1 + cosVrVp));
+                                G = (int)(G * (1 + cosVrVp));
+                                B = (int)(B * (1 + cosVrVp));
+                                if (R > 255) R = 255;
+                                if (G > 255) G = 255;
+                                if (B > 255) B = 255;
+                            }
 
                             bitmap.SetPixel(i, y, Color.FromArgb(R, G, B));
                         }
@@ -832,6 +900,35 @@ namespace GK_P2_Filling
         private void ReflectorCB_CheckedChanged(object sender, EventArgs e)
         {
             FillScanLines();
+        }
+
+        private void ReflectorCB_Click(object sender, EventArgs e)
+        {
+            if(ReflectorCB.Checked)
+            {
+                refHeight = (int)Prompt.ShowDialog("Wprowadź wysokość reflektora", "H - wysokość reflektora", refHeight);
+                K = (int)Prompt.ShowDialog("Wprowadź potęgę cosinusa dla reflektora", "K - potęga cosinusa", K);
+            }
+        }
+    }
+
+    public static class Prompt
+    {
+        public static double ShowDialog(string text, string caption, double length)
+        {
+            Form prompt = new Form();
+            prompt.Width = 300;
+            prompt.Height = 150;
+            prompt.Text = caption;
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+            NumericUpDown inputBox = new NumericUpDown() { Left = 50, Top = 50, Width = 200, Minimum = 1, Maximum = 9999, Value = (decimal)length };
+            Button confirmation = new Button() { Text = "Ok", Left = 150, Width = 100, Top = 70 };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(inputBox);
+            prompt.ShowDialog();
+            return Decimal.ToDouble(inputBox.Value);
         }
     }
 }

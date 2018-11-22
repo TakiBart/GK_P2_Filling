@@ -468,6 +468,33 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="BubbleCB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="BubbleCB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 43</value>
+  </data>
+  <data name="BubbleCB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 17</value>
+  </data>
+  <data name="BubbleCB.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="BubbleCB.Text" xml:space="preserve">
+    <value>Bąbelek</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Name" xml:space="preserve">
+    <value>BubbleCB</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="ReflectorCB.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -493,7 +520,7 @@
     <value>LighSourVectGB</value>
   </data>
   <data name="&gt;&gt;ReflectorCB.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="LighSourVectAnimRB.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -505,13 +532,13 @@
     <value>6, 43</value>
   </data>
   <data name="LighSourVectAnimRB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 17</value>
+    <value>80, 17</value>
   </data>
   <data name="LighSourVectAnimRB.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="LighSourVectAnimRB.Text" xml:space="preserve">
-    <value>Światło animowane</value>
+    <value>Animowane</value>
   </data>
   <data name="&gt;&gt;LighSourVectAnimRB.Name" xml:space="preserve">
     <value>LighSourVectAnimRB</value>
@@ -523,7 +550,7 @@
     <value>LighSourVectGB</value>
   </data>
   <data name="&gt;&gt;LighSourVectAnimRB.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="LighSourVectConstRB.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -550,7 +577,7 @@
     <value>LighSourVectGB</value>
   </data>
   <data name="&gt;&gt;LighSourVectConstRB.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="LighSourVectGB.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 474</value>

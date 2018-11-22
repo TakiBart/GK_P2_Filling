@@ -45,6 +45,7 @@
             this.Tri2ColConstRB = new System.Windows.Forms.RadioButton();
             this.Tri2ColorBoxPB = new System.Windows.Forms.PictureBox();
             this.LighSourVectGB = new System.Windows.Forms.GroupBox();
+            this.ReflectorCB = new System.Windows.Forms.CheckBox();
             this.LighSourVectAnimRB = new System.Windows.Forms.RadioButton();
             this.LighSourVectConstRB = new System.Windows.Forms.RadioButton();
             this.NormalVectWDGB = new System.Windows.Forms.GroupBox();
@@ -59,7 +60,7 @@
             this.LightColorGB = new System.Windows.Forms.GroupBox();
             this.LightColorBoxPB = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ReflectorCB = new System.Windows.Forms.CheckBox();
+            this.BubbleCB = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -214,12 +215,21 @@
             // 
             // LighSourVectGB
             // 
+            this.LighSourVectGB.Controls.Add(this.BubbleCB);
             this.LighSourVectGB.Controls.Add(this.ReflectorCB);
             this.LighSourVectGB.Controls.Add(this.LighSourVectAnimRB);
             this.LighSourVectGB.Controls.Add(this.LighSourVectConstRB);
             resources.ApplyResources(this.LighSourVectGB, "LighSourVectGB");
             this.LighSourVectGB.Name = "LighSourVectGB";
             this.LighSourVectGB.TabStop = false;
+            // 
+            // ReflectorCB
+            // 
+            resources.ApplyResources(this.ReflectorCB, "ReflectorCB");
+            this.ReflectorCB.Name = "ReflectorCB";
+            this.ReflectorCB.UseVisualStyleBackColor = true;
+            this.ReflectorCB.CheckedChanged += new System.EventHandler(this.ReflectorCB_CheckedChanged);
+            this.ReflectorCB.Click += new System.EventHandler(this.ReflectorCB_Click);
             // 
             // LighSourVectAnimRB
             // 
@@ -328,12 +338,11 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // ReflectorCB
+            // BubbleCB
             // 
-            resources.ApplyResources(this.ReflectorCB, "ReflectorCB");
-            this.ReflectorCB.Name = "ReflectorCB";
-            this.ReflectorCB.UseVisualStyleBackColor = true;
-            this.ReflectorCB.CheckedChanged += new System.EventHandler(this.ReflectorCB_CheckedChanged);
+            resources.ApplyResources(this.BubbleCB, "BubbleCB");
+            this.BubbleCB.Name = "BubbleCB";
+            this.BubbleCB.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -405,6 +414,7 @@
         private System.Windows.Forms.RadioButton Tri1ColConstRB;
         private System.Windows.Forms.PictureBox Tri1ColorBoxPB;
         private System.Windows.Forms.CheckBox ReflectorCB;
+        private System.Windows.Forms.CheckBox BubbleCB;
     }
 }
 
