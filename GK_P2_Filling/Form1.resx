@@ -168,275 +168,734 @@
   <data name="EditionGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="AddVerBut.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
+  <data name="Tri1ColTextPB.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
   </data>
-  <data name="AddVerBut.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="AddVerBut.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="Tri1ColTextPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="AddVerBut.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 206</value>
+  <data name="Tri1ColTextPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 85</value>
   </data>
-  <data name="AddVerBut.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 23</value>
+  <data name="Tri1ColTextPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
   </data>
-  <data name="AddVerBut.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="Tri1ColTextPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 38</value>
   </data>
-  <data name="AddVerBut.Text" xml:space="preserve">
-    <value>Dodaj wierzchołek</value>
-  </data>
-  <data name="&gt;&gt;AddVerBut.Name" xml:space="preserve">
-    <value>AddVerBut</value>
-  </data>
-  <data name="&gt;&gt;AddVerBut.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;AddVerBut.Parent" xml:space="preserve">
-    <value>EditionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;AddVerBut.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="AutoRelCB.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="AutoRelCB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 227</value>
-  </data>
-  <data name="AutoRelCB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 17</value>
-  </data>
-  <data name="AutoRelCB.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="AutoRelCB.Text" xml:space="preserve">
-    <value>Automatyczne relacje</value>
-  </data>
-  <data name="&gt;&gt;AutoRelCB.Name" xml:space="preserve">
-    <value>AutoRelCB</value>
-  </data>
-  <data name="&gt;&gt;AutoRelCB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;AutoRelCB.Parent" xml:space="preserve">
-    <value>edgesGB</value>
-  </data>
-  <data name="&gt;&gt;AutoRelCB.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="ConstLenRB.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ConstLenRB.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="ConstLenRB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 91</value>
-  </data>
-  <data name="ConstLenRB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 17</value>
-  </data>
-  <data name="ConstLenRB.TabIndex" type="System.Int32, mscorlib">
+  <data name="Tri1ColTextPB.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="ConstLenRB.Text" xml:space="preserve">
-    <value>Stała długość</value>
+  <data name="&gt;&gt;Tri1ColTextPB.Name" xml:space="preserve">
+    <value>Tri1ColTextPB</value>
   </data>
-  <data name="&gt;&gt;ConstLenRB.Name" xml:space="preserve">
-    <value>ConstLenRB</value>
+  <data name="&gt;&gt;Tri1ColTextPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ConstLenRB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;Tri1ColTextPB.Parent" xml:space="preserve">
+    <value>Triangle1GB</value>
   </data>
-  <data name="&gt;&gt;ConstLenRB.Parent" xml:space="preserve">
-    <value>edgesGB</value>
-  </data>
-  <data name="&gt;&gt;ConstLenRB.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="VerticalRB.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="VerticalRB.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="VerticalRB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 68</value>
-  </data>
-  <data name="VerticalRB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 17</value>
-  </data>
-  <data name="VerticalRB.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="VerticalRB.Text" xml:space="preserve">
-    <value>Pionowa</value>
-  </data>
-  <data name="&gt;&gt;VerticalRB.Name" xml:space="preserve">
-    <value>VerticalRB</value>
-  </data>
-  <data name="&gt;&gt;VerticalRB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;VerticalRB.Parent" xml:space="preserve">
-    <value>edgesGB</value>
-  </data>
-  <data name="&gt;&gt;VerticalRB.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="HorizontalRB.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="HorizontalRB.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="HorizontalRB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 44</value>
-  </data>
-  <data name="HorizontalRB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 17</value>
-  </data>
-  <data name="HorizontalRB.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="HorizontalRB.Text" xml:space="preserve">
-    <value>Pozioma</value>
-  </data>
-  <data name="&gt;&gt;HorizontalRB.Name" xml:space="preserve">
-    <value>HorizontalRB</value>
-  </data>
-  <data name="&gt;&gt;HorizontalRB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;HorizontalRB.Parent" xml:space="preserve">
-    <value>edgesGB</value>
-  </data>
-  <data name="&gt;&gt;HorizontalRB.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="NoRestRB.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="NoRestRB.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="NoRestRB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 20</value>
-  </data>
-  <data name="NoRestRB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 17</value>
-  </data>
-  <data name="NoRestRB.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;Tri1ColTextPB.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="NoRestRB.Text" xml:space="preserve">
-    <value>Brak ograniczeń</value>
+  <data name="Tri1ColTextRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;NoRestRB.Name" xml:space="preserve">
-    <value>NoRestRB</value>
+  <data name="Tri1ColTextRB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;NoRestRB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Tri1ColTextRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 62</value>
   </data>
-  <data name="&gt;&gt;NoRestRB.Parent" xml:space="preserve">
-    <value>edgesGB</value>
+  <data name="Tri1ColTextRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 17</value>
   </data>
-  <data name="&gt;&gt;NoRestRB.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="edgesGB.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="edgesGB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 77</value>
-  </data>
-  <data name="edgesGB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 355</value>
-  </data>
-  <data name="edgesGB.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="edgesGB.Text" xml:space="preserve">
-    <value>Krawędzie</value>
-  </data>
-  <data name="&gt;&gt;edgesGB.Name" xml:space="preserve">
-    <value>edgesGB</value>
-  </data>
-  <data name="&gt;&gt;edgesGB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;edgesGB.Parent" xml:space="preserve">
-    <value>EditionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;edgesGB.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="DeleteButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="DeleteButton.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="DeleteButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 48</value>
-  </data>
-  <data name="DeleteButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 23</value>
-  </data>
-  <data name="DeleteButton.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="DeleteButton.Text" xml:space="preserve">
-    <value>Usuń</value>
-  </data>
-  <data name="&gt;&gt;DeleteButton.Name" xml:space="preserve">
-    <value>DeleteButton</value>
-  </data>
-  <data name="&gt;&gt;DeleteButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;DeleteButton.Parent" xml:space="preserve">
-    <value>EditionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;DeleteButton.ZOrder" xml:space="preserve">
+  <data name="Tri1ColTextRB.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="ClearButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
+  <data name="Tri1ColTextRB.Text" xml:space="preserve">
+    <value>Tekstura</value>
   </data>
-  <data name="ClearButton.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="&gt;&gt;Tri1ColTextRB.Name" xml:space="preserve">
+    <value>Tri1ColTextRB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColTextRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColTextRB.Parent" xml:space="preserve">
+    <value>Triangle1GB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColTextRB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Tri1ColConstRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Tri1ColConstRB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Tri1ColConstRB.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 19</value>
   </data>
-  <data name="ClearButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 23</value>
+  <data name="Tri1ColConstRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 17</value>
   </data>
-  <data name="ClearButton.TabIndex" type="System.Int32, mscorlib">
+  <data name="Tri1ColConstRB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="Tri1ColConstRB.Text" xml:space="preserve">
+    <value>Stały</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColConstRB.Name" xml:space="preserve">
+    <value>Tri1ColConstRB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColConstRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColConstRB.Parent" xml:space="preserve">
+    <value>Triangle1GB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColConstRB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="Tri1ColorBoxPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Tri1ColorBoxPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>21, 38</value>
+  </data>
+  <data name="Tri1ColorBoxPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
+  </data>
+  <data name="Tri1ColorBoxPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 18</value>
+  </data>
+  <data name="Tri1ColorBoxPB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColorBoxPB.Name" xml:space="preserve">
+    <value>Tri1ColorBoxPB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColorBoxPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColorBoxPB.Parent" xml:space="preserve">
+    <value>Triangle1GB</value>
+  </data>
+  <data name="&gt;&gt;Tri1ColorBoxPB.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="Triangle1GB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 13</value>
+  </data>
+  <data name="Triangle1GB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 129</value>
+  </data>
+  <data name="Triangle1GB.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="ClearButton.Text" xml:space="preserve">
-    <value>Wyczyść</value>
+  <data name="Triangle1GB.Text" xml:space="preserve">
+    <value>Nr 1</value>
   </data>
-  <data name="&gt;&gt;ClearButton.Name" xml:space="preserve">
-    <value>ClearButton</value>
+  <data name="&gt;&gt;Triangle1GB.Name" xml:space="preserve">
+    <value>Triangle1GB</value>
   </data>
-  <data name="&gt;&gt;ClearButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;Triangle1GB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ClearButton.Parent" xml:space="preserve">
+  <data name="&gt;&gt;Triangle1GB.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;Triangle1GB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Tri2ColTextPB.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="Tri2ColTextPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Tri2ColTextPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 85</value>
+  </data>
+  <data name="Tri2ColTextPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
+  </data>
+  <data name="Tri2ColTextPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 38</value>
+  </data>
+  <data name="Tri2ColTextPB.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextPB.Name" xml:space="preserve">
+    <value>Tri2ColTextPB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextPB.Parent" xml:space="preserve">
+    <value>Triangle2GB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextPB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Tri2ColTextRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Tri2ColTextRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 62</value>
+  </data>
+  <data name="Tri2ColTextRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 17</value>
+  </data>
+  <data name="Tri2ColTextRB.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="Tri2ColTextRB.Text" xml:space="preserve">
+    <value>Tekstura</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextRB.Name" xml:space="preserve">
+    <value>Tri2ColTextRB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextRB.Parent" xml:space="preserve">
+    <value>Triangle2GB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColTextRB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Tri2ColConstRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Tri2ColConstRB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Tri2ColConstRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="Tri2ColConstRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 17</value>
+  </data>
+  <data name="Tri2ColConstRB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="Tri2ColConstRB.Text" xml:space="preserve">
+    <value>Stały</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColConstRB.Name" xml:space="preserve">
+    <value>Tri2ColConstRB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColConstRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColConstRB.Parent" xml:space="preserve">
+    <value>Triangle2GB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColConstRB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="Tri2ColorBoxPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 38</value>
+  </data>
+  <data name="Tri2ColorBoxPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
+  </data>
+  <data name="Tri2ColorBoxPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 18</value>
+  </data>
+  <data name="Tri2ColorBoxPB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColorBoxPB.Name" xml:space="preserve">
+    <value>Tri2ColorBoxPB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColorBoxPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColorBoxPB.Parent" xml:space="preserve">
+    <value>Triangle2GB</value>
+  </data>
+  <data name="&gt;&gt;Tri2ColorBoxPB.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="Triangle2GB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>88, 13</value>
+  </data>
+  <data name="Triangle2GB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 129</value>
+  </data>
+  <data name="Triangle2GB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="Triangle2GB.Text" xml:space="preserve">
+    <value>Nr 2</value>
+  </data>
+  <data name="&gt;&gt;Triangle2GB.Name" xml:space="preserve">
+    <value>Triangle2GB</value>
+  </data>
+  <data name="&gt;&gt;Triangle2GB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Triangle2GB.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;Triangle2GB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 62</value>
+  </data>
+  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 148</value>
+  </data>
+  <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>Kolory trójkątów</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Parent" xml:space="preserve">
     <value>EditionGroupBox</value>
   </data>
-  <data name="&gt;&gt;ClearButton.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="BubbleCB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="BubbleCB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 43</value>
+  </data>
+  <data name="BubbleCB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 17</value>
+  </data>
+  <data name="BubbleCB.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="BubbleCB.Text" xml:space="preserve">
+    <value>Bąbelek</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Name" xml:space="preserve">
+    <value>BubbleCB</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;BubbleCB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ReflectorCB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ReflectorCB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 20</value>
+  </data>
+  <data name="ReflectorCB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 17</value>
+  </data>
+  <data name="ReflectorCB.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="ReflectorCB.Text" xml:space="preserve">
+    <value>Śledzący</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Name" xml:space="preserve">
+    <value>ReflectorCB</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;ReflectorCB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="LighSourVectAnimRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LighSourVectAnimRB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LighSourVectAnimRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 43</value>
+  </data>
+  <data name="LighSourVectAnimRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 17</value>
+  </data>
+  <data name="LighSourVectAnimRB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="LighSourVectAnimRB.Text" xml:space="preserve">
+    <value>Animowane</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectAnimRB.Name" xml:space="preserve">
+    <value>LighSourVectAnimRB</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectAnimRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectAnimRB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectAnimRB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="LighSourVectConstRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LighSourVectConstRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="LighSourVectConstRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 17</value>
+  </data>
+  <data name="LighSourVectConstRB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="LighSourVectConstRB.Text" xml:space="preserve">
+    <value>Stały [0,0,1]</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectConstRB.Name" xml:space="preserve">
+    <value>LighSourVectConstRB</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectConstRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectConstRB.Parent" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectConstRB.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="LighSourVectGB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 474</value>
+  </data>
+  <data name="LighSourVectGB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 67</value>
+  </data>
+  <data name="LighSourVectGB.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="LighSourVectGB.Text" xml:space="preserve">
+    <value>Wektor do źródła światła</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectGB.Name" xml:space="preserve">
+    <value>LighSourVectGB</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectGB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectGB.Parent" xml:space="preserve">
+    <value>EditionGroupBox</value>
+  </data>
+  <data name="&gt;&gt;LighSourVectGB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="DisturbTextPB.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="DisturbTextPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="DisturbTextPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 67</value>
+  </data>
+  <data name="DisturbTextPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
+  </data>
+  <data name="DisturbTextPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>135, 50</value>
+  </data>
+  <data name="DisturbTextPB.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextPB.Name" xml:space="preserve">
+    <value>DisturbTextPB</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextPB.Parent" xml:space="preserve">
+    <value>DisturbanceGB</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextPB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="DisturbTextRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="DisturbTextRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 44</value>
+  </data>
+  <data name="DisturbTextRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 17</value>
+  </data>
+  <data name="DisturbTextRB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="DisturbTextRB.Text" xml:space="preserve">
+    <value>Z tekstury</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextRB.Name" xml:space="preserve">
+    <value>DisturbTextRB</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextRB.Parent" xml:space="preserve">
+    <value>DisturbanceGB</value>
+  </data>
+  <data name="&gt;&gt;DisturbTextRB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="DisturbNoRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="DisturbNoRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="DisturbNoRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 17</value>
+  </data>
+  <data name="DisturbNoRB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="DisturbNoRB.Text" xml:space="preserve">
+    <value>Brak [0,0,0]</value>
+  </data>
+  <data name="&gt;&gt;DisturbNoRB.Name" xml:space="preserve">
+    <value>DisturbNoRB</value>
+  </data>
+  <data name="&gt;&gt;DisturbNoRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DisturbNoRB.Parent" xml:space="preserve">
+    <value>DisturbanceGB</value>
+  </data>
+  <data name="&gt;&gt;DisturbNoRB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="DisturbanceGB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 148</value>
+  </data>
+  <data name="DisturbanceGB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 122</value>
+  </data>
+  <data name="DisturbanceGB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="DisturbanceGB.Text" xml:space="preserve">
+    <value>Zaburzenie</value>
+  </data>
+  <data name="&gt;&gt;DisturbanceGB.Name" xml:space="preserve">
+    <value>DisturbanceGB</value>
+  </data>
+  <data name="&gt;&gt;DisturbanceGB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DisturbanceGB.Parent" xml:space="preserve">
+    <value>NormalVectWDGB</value>
+  </data>
+  <data name="&gt;&gt;DisturbanceGB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="NormVectTextPB.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="NormVectTextPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="NormVectTextPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 67</value>
+  </data>
+  <data name="NormVectTextPB.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>25, 3, 25, 3</value>
+  </data>
+  <data name="NormVectTextPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>135, 50</value>
+  </data>
+  <data name="NormVectTextPB.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;NormVectTextPB.Name" xml:space="preserve">
+    <value>NormVectTextPB</value>
+  </data>
+  <data name="&gt;&gt;NormVectTextPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NormVectTextPB.Parent" xml:space="preserve">
+    <value>NormalVectGB</value>
+  </data>
+  <data name="&gt;&gt;NormVectTextPB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="NormalVectTextRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="NormalVectTextRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 44</value>
+  </data>
+  <data name="NormalVectTextRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 17</value>
+  </data>
+  <data name="NormalVectTextRB.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="NormalVectTextRB.Text" xml:space="preserve">
+    <value>Z tekstury</value>
+  </data>
+  <data name="&gt;&gt;NormalVectTextRB.Name" xml:space="preserve">
+    <value>NormalVectTextRB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectTextRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NormalVectTextRB.Parent" xml:space="preserve">
+    <value>NormalVectGB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectTextRB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="NormalVectConstRB.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="NormalVectConstRB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="NormalVectConstRB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 17</value>
+  </data>
+  <data name="NormalVectConstRB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="NormalVectConstRB.Text" xml:space="preserve">
+    <value>Stały [0,0,1]</value>
+  </data>
+  <data name="&gt;&gt;NormalVectConstRB.Name" xml:space="preserve">
+    <value>NormalVectConstRB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectConstRB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NormalVectConstRB.Parent" xml:space="preserve">
+    <value>NormalVectGB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectConstRB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="NormalVectGB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="NormalVectGB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 123</value>
+  </data>
+  <data name="NormalVectGB.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="NormalVectGB.Text" xml:space="preserve">
+    <value>Wektor normalny</value>
+  </data>
+  <data name="&gt;&gt;NormalVectGB.Name" xml:space="preserve">
+    <value>NormalVectGB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectGB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NormalVectGB.Parent" xml:space="preserve">
+    <value>NormalVectWDGB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectGB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="NormalVectWDGB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 197</value>
+  </data>
+  <data name="NormalVectWDGB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 271</value>
+  </data>
+  <data name="NormalVectWDGB.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="NormalVectWDGB.Text" xml:space="preserve">
+    <value>Wektor normalny z zaburzeniem</value>
+  </data>
+  <data name="&gt;&gt;NormalVectWDGB.Name" xml:space="preserve">
+    <value>NormalVectWDGB</value>
+  </data>
+  <data name="&gt;&gt;NormalVectWDGB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NormalVectWDGB.Parent" xml:space="preserve">
+    <value>EditionGroupBox</value>
+  </data>
+  <data name="&gt;&gt;NormalVectWDGB.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="LightColorBoxPB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LightColorBoxPB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 19</value>
+  </data>
+  <data name="LightColorBoxPB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 12</value>
+  </data>
+  <data name="LightColorBoxPB.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;LightColorBoxPB.Name" xml:space="preserve">
+    <value>LightColorBoxPB</value>
+  </data>
+  <data name="&gt;&gt;LightColorBoxPB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LightColorBoxPB.Parent" xml:space="preserve">
+    <value>LightColorGB</value>
+  </data>
+  <data name="&gt;&gt;LightColorBoxPB.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="LightColorGB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="LightColorGB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 37</value>
+  </data>
+  <data name="LightColorGB.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="LightColorGB.Text" xml:space="preserve">
+    <value>Kolor światła</value>
+  </data>
+  <data name="&gt;&gt;LightColorGB.Name" xml:space="preserve">
+    <value>LightColorGB</value>
+  </data>
+  <data name="&gt;&gt;LightColorGB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LightColorGB.Parent" xml:space="preserve">
+    <value>EditionGroupBox</value>
+  </data>
+  <data name="&gt;&gt;LightColorGB.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <data name="EditionGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 12</value>
+    <value>3, 3</value>
   </data>
   <data name="EditionGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 435</value>
+    <value>185, 547</value>
   </data>
   <data name="EditionGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -455,90 +914,6 @@
   </data>
   <data name="&gt;&gt;EditionGroupBox.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <metadata name="ImportExportGroupBox.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="ImportExportGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left, Right</value>
-  </data>
-  <data name="OpenButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="OpenButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 57</value>
-  </data>
-  <data name="OpenButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 33</value>
-  </data>
-  <data name="OpenButton.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="OpenButton.Text" xml:space="preserve">
-    <value>Wczytaj</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Name" xml:space="preserve">
-    <value>OpenButton</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.Parent" xml:space="preserve">
-    <value>ImportExportGroupBox</value>
-  </data>
-  <data name="&gt;&gt;OpenButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="SaveButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 19</value>
-  </data>
-  <data name="SaveButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 33</value>
-  </data>
-  <data name="SaveButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="SaveButton.Text" xml:space="preserve">
-    <value>Zapisz</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Name" xml:space="preserve">
-    <value>SaveButton</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.Parent" xml:space="preserve">
-    <value>ImportExportGroupBox</value>
-  </data>
-  <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="ImportExportGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 453</value>
-  </data>
-  <data name="ImportExportGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 97</value>
-  </data>
-  <data name="ImportExportGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="ImportExportGroupBox.Text" xml:space="preserve">
-    <value>Import/Eksport</value>
-  </data>
-  <data name="&gt;&gt;ImportExportGroupBox.Name" xml:space="preserve">
-    <value>ImportExportGroupBox</value>
-  </data>
-  <data name="&gt;&gt;ImportExportGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ImportExportGroupBox.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
-  </data>
-  <data name="&gt;&gt;ImportExportGroupBox.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel2.Name" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -573,6 +948,9 @@
   <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -591,8 +969,14 @@
   <data name="$this.Text" xml:space="preserve">
     <value>GraphEditor</value>
   </data>
+  <data name="&gt;&gt;timer1.Name" xml:space="preserve">
+    <value>timer1</value>
+  </data>
+  <data name="&gt;&gt;timer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>GraphEditor</value>
+    <value>Form1</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

@@ -14,166 +14,105 @@ using System.Drawing.Drawing2D;
 namespace GK_P2_Filling
 {
 
-    // #1 Nie usuwać pierwszego wierzchołka - przeglądanie zaczyna się na twardo od 0.
-    
     public partial class Form1 : Form
     {
-        
-        public Dictionary<int,MyPoint> Points = new Dictionary<int, MyPoint>();
-        int maxKey = 0;
 
+        public PointF[] Points = new PointF[] { new PointF(50,50), new PointF(300,35), new PointF(75, 400),
+                                                new PointF(60,250), new PointF(400,250), new PointF(300, 90)};
+        // First three are first triangle
+        
+        public MyEdge[] GET;
+        public MyEdge[] GET2;
+        public MyEdge AET;
+        public MyEdge AET2;
+
+        // D - zaburzenie
+        float[] D = { 0, 0, 0 };
+
+        // L - wersor do światła
+        float[] L = { 0, 0, 1 };
+
+        // N - wektor normalny 
+        float[] N = { 0, 0, 1 };
+
+        // Np - wektor normalny z zaburzeniem
+        float[] Np = { 0, 0, 1 };
+
+        // lightPos - położenie źródła światła
+        float[] lightPos = { 0, 0, 1 };
+
+        DirectBitmap tri1ColText;
+        DirectBitmap tri2ColText;
+        DirectBitmap normVectText;
+        DirectBitmap disturbText;
+        
         int iChosen;
         bool isChosen = false;
-        bool isEdgeChosen = false;
-        
-        bool isBeingMoved = false;
-        Point mousePos;
-        int r = 10;
 
-        bool isCreating = true;
-        bool isAutoNext = false;
-        bool isAutoHor = false;
-        bool isAutoDoing = false;
+        bool isBeingMoved = false;
+        bool isTriangleBeingMoved = false;
+        Point mousePos;
+
+        float angle = 0;
+        float rad;
+        int r = 40;
+        int refHeight = 200;
+        int K = 100;
+
 
         public Form1()
         {
             InitializeComponent();
             WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-            //OpenButton_Click(this, new EventArgs());
-            // Default polygon
-            //0,141,96,1,1,4,2
-            //1,248,135,2,3,0,1
-            //2,331,168,3,2,1,3
-            //3,175,192,4,1,2,2
-            //4,240,132,0,2,3,1
+            WorkspacePictureBox.Refresh();
+            
+            GET = new MyEdge[WorkspacePictureBox.Height];
+            GET2 = new MyEdge[WorkspacePictureBox.Height];
+            
+            tri1ColText = new DirectBitmap(Properties.Resources.brick_normalmap);
+            Tri1ColTextPB.BackgroundImage = tri1ColText.Bitmap;
+            
+            tri2ColText = new DirectBitmap(Properties.Resources.normal_map);
+            Tri2ColTextPB.BackgroundImage = tri2ColText.Bitmap;
+            
+            normVectText = new DirectBitmap(Properties.Resources.normal_map);
+            NormVectTextPB.BackgroundImage = normVectText.Bitmap;
+            
+            disturbText = new DirectBitmap(Properties.Resources.brick_normalmap);
+            DisturbTextPB.BackgroundImage = disturbText.Bitmap;
+            
+            timer1.Start();
+
+            FillScanLines();
             
         }
-
-        //private void ColorButton_Click(object sender, EventArgs e)
-        //{
-        //    ColorDialog cd = new ColorDialog();
-
-        //    if (cd.ShowDialog() == DialogResult.OK)
-        //    {
-        //        ColorPictureBox.BackColor = cd.Color;
-        //        if(isChosen)
-        //        {
-        //            int i = Points.IndexOf(chosen);
-        //            Points[i] = chosen;
-
-        //            RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-        //        }
-        //    }
-        //}
-
-        private void RedrawGraph(Graphics g)
+        public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
+            double ratioX = (double)maxWidth / image.Width;
+            double ratioY = (double)maxHeight / image.Height;
+            double ratio = Math.Min(ratioX, ratioY);
+
+            int newWidth = (int)(image.Width * ratio);
+            int newHeight = (int)(image.Height * ratio);
+
+            Bitmap newImage = new Bitmap(newWidth, newHeight);
+
+            using (Graphics graphics = Graphics.FromImage(newImage))
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+            return newImage;
+        }
+
+        private void RedrawGraph()
+        {
+            //   WorkspacePictureBox.Refresh();
             Pen pen = new Pen(Color.Black, 3);
-            Rectangle circ = new Rectangle();
-            //System.Drawing.Font font = new System.Drawing.Font("Arial", 12);
+            RectangleF circ = new RectangleF();
             SolidBrush brush = new SolidBrush(Color.Black);
-
             circ.Size = new Size(r, r);
-            using (g)
-            {
-                if (!isCreating)
-                {
-                    int prev = iChosen == -1 ? 0 : iChosen;
-                    int next = Points[prev].INext;
-                    CorrectPoint(prev, next, true);
-                    while (true)
-                    {
-                        CorrectPoint(prev, Points[prev].IPrev, false);
-                        CorrectPoint(next, Points[next].INext, true);
-                        prev = Points[prev].IPrev;
-                        next = Points[next].INext;
-                        if (Points[prev].INext == next || Points[prev].INext == Points[next].IPrev)
-                            break;
-                    }
-                }
-                foreach (KeyValuePair<int, MyPoint> point in Points)
-                {
-                    if (point.Value.Loc.X < WorkspacePictureBox.Width && point.Value.Loc.Y < WorkspacePictureBox.Height)
-                    {
-                        if (!isCreating || point.Key != maxKey - 1)
-                        {
-                            if (isEdgeChosen && point.Key == iChosen)
-                                pen.Color = Color.GreenYellow;
-                            switch (point.Value.NRest)
-                            {
-                                case 1:
-                                    DrawString("_", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y + r) / 2), Color.Red);
-                                    break;
-                                case 2:
-                                    DrawString("|", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X + r) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y) / 2), Color.Red);
-                                    break;
-                                case 3:
-                                    int length = (int)Math.Sqrt((point.Value.Loc.X - Points[point.Value.INext].Loc.X) * (point.Value.Loc.X - Points[point.Value.INext].Loc.X) + (point.Value.Loc.Y - Points[point.Value.INext].Loc.Y) * (point.Value.Loc.Y - Points[point.Value.INext].Loc.Y));
-                                    //DrawString(length.ToString(), new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X + r) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y) / 2));
-                                    DrawString(((int)point.Value.NLength).ToString(), new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X + r) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y) / 2), Color.Red);
-                                    break;
-                            }
 
-                            if(isChosen && AutoRelCB.Checked && isAutoDoing)
-                            {
-                                if (point.Value.INext == iChosen && isAutoNext == false)
-                                {
-                                    if (isAutoHor)
-                                    {
-                                        DrawString("_", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y + r) / 2), Color.Black);
-                                    }
-                                    else
-                                    {
-                                        DrawString("|", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X + r) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y) / 2), Color.Black);
-                                    }
-                                    //isAutoDoing = false;
-                                }
-                                if (point.Key == iChosen && isAutoNext)
-                                {
-                                    if (isAutoHor)
-                                    {
-                                        DrawString("_", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y + r) / 2), Color.Black);
-                                    }
-                                    else
-                                    {
-                                        DrawString("|", new Point((point.Value.Loc.X + Points[point.Value.INext].Loc.X + r) / 2, (point.Value.Loc.Y + Points[point.Value.INext].Loc.Y) / 2), Color.Black);
-                                    }
-                                    //isAutoDoing = false;
-                                }
-                            }
-                            //isAutoDoing = false;
-
-                            //g.DrawLine(pen, new Point(point.Value.Loc.X + r / 2, point.Value.Loc.Y + r / 2), new Point(Points[point.Value.INext].Loc.X + r / 2, Points[point.Value.INext].Loc.Y + r / 2));
-                            BresenhamLine(point.Value.Loc.X + r / 2, point.Value.Loc.Y + r / 2, Points[point.Value.INext].Loc.X + r / 2, Points[point.Value.INext].Loc.Y + r / 2, pen.Color);
-                        }
-
-                        circ.Location = point.Value.Loc;
-                        pen.Color = Color.Black;
-                        brush.Color = Color.Black;
-
-                        g.DrawEllipse(pen, circ);
-                        
-                        g.FillEllipse(brush, circ);
-                        //brush.Color = p.color;
-                        //g.DrawString((Points.IndexOf(p) + 1).ToString(), font, brush, new Point(p.point.X + r / 2 - font.Height / 2, p.point.Y + r / 2 - font.Height / 2));
-
-                    }
-                }
-                if (!isCreating)
-                {
-                    circ.Location = Points[0].Loc;
-                    g.DrawEllipse(pen, circ);
-                    g.FillEllipse(brush, circ);
-                }
-
-                if (isChosen)
-                {
-                    circ.Location = Points[iChosen].Loc;
-                    pen.Color = Color.GreenYellow;
-                    g.DrawEllipse(pen, circ);
-                }
-                WorkspacePictureBox.Refresh();
-            }
+            FillScanLines();
+            
             brush.Dispose();
             pen.Dispose();
         }
@@ -185,12 +124,12 @@ namespace GK_P2_Filling
             using (Graphics g = Graphics.FromImage(nIm))
             {
                 g.DrawImage(WorkspacePictureBox.Image, new Point(0, 0));
-                RedrawGraph(g);
+                FillScanLines();
             }
             WorkspacePictureBox.Image.Dispose();
             WorkspacePictureBox.Image = nIm;
         }
-        
+
 
         private void WorkspacePictureBox_MouseDown(object sender, MouseEventArgs e)
         {
@@ -198,680 +137,778 @@ namespace GK_P2_Filling
             Point location = new Point(e.X - r / 2, e.Y - r / 2);
             if (e.Button == MouseButtons.Left)
             {
-                if (isCreating)
+
+                if (Points.Length <= 0)
+                    return;
+
+                Rectangle circ = new Rectangle();
+                int iClosest = 0;
+                int closestDist = (int)(Math.Pow(Math.Abs(Points[iClosest].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[iClosest].Y + r / 2 - e.Y), 2));
+
+                circ.Size = new Size(r, r);
+                using (g)
                 {
-                    if (Points.Count > 1 && AutoRelCB.Checked)
+                    for(int i = 0; i < Points.Length; i++)
                     {
-                        if (Math.Abs(location.Y - Points[maxKey - 1].Loc.Y) < 7 && Points[maxKey - 1].PRest != 1)
+                        if (Math.Pow(Math.Abs(Points[i].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[i].Y + r / 2 - e.Y), 2) < closestDist)
                         {
-                            Points.Add(maxKey++, new MyPoint(location, maxKey, 0, maxKey - 2, 1));
-                            Points[maxKey - 2].NRest = 1;
+                            iClosest = i;
+                            closestDist = (int)(Math.Pow(Math.Abs(Points[i].X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[i].Y + r / 2 - e.Y), 2));
                         }
-                        else if (Math.Abs(location.X - Points[maxKey - 1].Loc.X) < 7 && Points[maxKey-1].PRest != 2)
-                        {
-                            Points.Add(maxKey++, new MyPoint(location, maxKey, 0, maxKey - 2, 2));
-                            Points[maxKey - 2].NRest = 2;
-                        }
-                        else
-                            Points.Add(maxKey++, new MyPoint(location, maxKey, 0, maxKey - 2, 0));
+
+                    }
+
+                    iChosen = iClosest;
+                    isBeingMoved = true;
+
+                    if (closestDist < 800)
+                    {
+                        isTriangleBeingMoved = false;
+                        isChosen = true;
+                        //iChosen = iClosest;
+                        //isBeingMoved = true;
                     }
                     else
-                        Points.Add(maxKey++, new MyPoint(location, maxKey, 0, maxKey - 2, 0));
-                    //WorkspacePictureBox.Image.Dispose();
-                    //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                    RedrawGraph(g);
-                }
-                else // isCreating == false
-                {
-                    if (Points.Count <= 0)
-                        return;
-                   
-                    Rectangle circ = new Rectangle();
-                    //MyPoint closest = Points[0];
-                    // #1 ========|v|=========|^|
-                    int iClosest = 0;
-                    int closestDist = (int)(Math.Pow(Math.Abs(Points[iClosest].Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(Points[iClosest].Loc.Y + r / 2 - e.Y), 2));
-                    
-                    circ.Size = new Size(r, r);
-                    using (g)
                     {
-                        foreach (KeyValuePair<int, MyPoint> point in Points)
-                        {
-                            if (Math.Pow(Math.Abs(point.Value.Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(point.Value.Loc.Y + r / 2 - e.Y), 2) < closestDist)
-                            {
-                                iClosest = point.Key;
-                                closestDist = (int)(Math.Pow(Math.Abs(point.Value.Loc.X + r / 2 - e.X), 2) + Math.Pow(Math.Abs(point.Value.Loc.Y + r / 2 - e.Y), 2));
-                            }
-                            
-                            isEdgeChosen = false;
-                            NoRestRB.Enabled = false;
-                            HorizontalRB.Enabled = false;
-                            VerticalRB.Enabled = false;
-                            ConstLenRB.Enabled = false;
-                            AddVerBut.Enabled = false;
-                        }
-
-                        if (closestDist < 800)
-                        {
-                            isChosen = true;
-                            DeleteButton.Enabled = true;
-                            iChosen = iClosest;
-                            isBeingMoved = true;
-                        }
-                        else
-                        {
-                            foreach (KeyValuePair<int, MyPoint> point in Points)
-                            {
-
-                                if (IsOnLine(point.Value.Loc, Points[point.Value.INext].Loc, e.Location, 17))
-                                {
-                                    isChosen = false;
-                                    iChosen = point.Key;
-                                    switch (Points[iChosen].NRest)
-                                    {
-                                        case 0:
-                                            NoRestRB.Checked = true;
-                                            break;
-                                        case 1:
-                                            HorizontalRB.Checked = true;
-                                            break;
-                                        case 2:
-                                            VerticalRB.Checked = true;
-                                            break;
-                                        case 3:
-                                            ConstLenRB.Checked = true;
-                                            break;
-                                    }
-                                    isEdgeChosen = true;
-                                    break;
-                                }
-                            }
-                                if (isEdgeChosen)
-                                {
-                                    NoRestRB.Enabled = true;
-                                    HorizontalRB.Enabled = true;
-                                    VerticalRB.Enabled = true;
-                                    ConstLenRB.Enabled = true;
-                                    AddVerBut.Enabled = true;
-                                    DeleteButton.Enabled = false;
-
-                                }
-                                else
-                                {
-                                    isChosen = false;
-                                    DeleteButton.Enabled = false;
-                                }
-                            
-                        }
-                        WorkspacePictureBox.Refresh();
-                        //WorkspacePictureBox.Image.Dispose();
-                        //WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                        RedrawGraph(g);
-                    }
-
-                    
-                    mousePos = e.Location;
-                    
-                }
-            }
-            else if(e.Button == MouseButtons.Right)
-            {
-                if(isCreating)
-                {
-                    isCreating = false;
-                    Points[maxKey - 1].INext = 0;
-                    Points[0].IPrev = maxKey - 1;
-                    RedrawGraph(g);
-                }
-            }
-        }
-
-
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog save = new SaveFileDialog
-            {
-                FileName = "default.graph",
-                Filter = "Graph files (*.graph)|*.graph"
-            };
-
-            if (save.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    using (StreamWriter sw = new StreamWriter(save.FileName))
-                    {
-                        foreach (KeyValuePair<int, MyPoint> point in Points)
-                            sw.WriteLine("{0},{1},{2},{3},{4},{5},{6}", point.Key, point.Value.Loc.X, point.Value.Loc.Y, point.Value.INext, point.Value.NRest, point.Value.IPrev, point.Value.PRest);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(GlobalStrings.SaveErrorMessageBox+$"\n{ex.Message}", "ERROR");
-                    MessageBox.Show("Saving error:\n{ex.Message}", "ERROR");
-                }
-            }
-            save.Dispose();
-
-        }
-
-        private void OpenButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog open = new OpenFileDialog
-            {
-                Filter = "Graph files (*.graph)|*.graph"
-            };
-            if (open.ShowDialog() == DialogResult.OK && File.Exists(open.FileName))
-            {
-                try
-                {
-                    string[] pts = new string[7];
-                    string word = "";
-                    using (StreamReader sr = new StreamReader(open.FileName))
-                    {
-                        Points.Clear();
+                        isTriangleBeingMoved = true;
                         isChosen = false;
-                        isEdgeChosen = false;
-                        iChosen = -1;
-                        WorkspacePictureBox.Image.Dispose();
-                        WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-
-                        while ((word = sr.ReadLine()) != null)
-                        {
-                            pts = word.Split(',', '\n');
-                            Points.Add(Int32.Parse(pts[0]), new MyPoint(new Point(Int32.Parse(pts[1]), Int32.Parse(pts[2])), Int32.Parse(pts[3]), Int32.Parse(pts[4]), Int32.Parse(pts[5]), Int32.Parse(pts[6])));
-                            if (maxKey < Int32.Parse(pts[0]))
-                                maxKey = Int32.Parse(pts[0]);
-                        }
-                        maxKey++;
-                        WorkspacePictureBox.Image.Dispose();
-                        WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                        RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
                     }
+                    WorkspacePictureBox.Refresh();
+                    FillScanLines();
                 }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(GlobalStrings.OpenErrorMessageBox+"\n" + ex.Message, "ERROR");
-                    MessageBox.Show("Loading error:\n" + ex.Message, "ERROR");
-                }
+                mousePos = e.Location;
             }
-            open.Dispose();
+            
         }
-
-        private void ClearButton_Click(object sender, EventArgs e)
-        {
-            Points.Clear();
-            maxKey = 0;
-            iChosen = -1;
-            isChosen = false;
-            isEdgeChosen = false;
-            isCreating = true;
-            DeleteButton.Enabled = false;
-            WorkspacePictureBox.Image.Dispose();
-            WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-        }
-
-        private void DeleteButton_Click(object sender, EventArgs e)
-        {
-            if(isChosen)
-            {
-                DeletePoint();
-            }
-        }
-
-        private void GraphEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-            if (e.KeyCode == Keys.Delete)
-            {
-                DeletePoint();               
-            }
-        }
-
-        //private void PLButton_Click(object sender, EventArgs e)
-        //{
-        //    Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
-
-        //    ApplyResourceToControl(this, new ComponentResourceManager(typeof(GraphEditor)), new System.Globalization.CultureInfo("pl-PL"));
-
-        //}
-        //private void ApplyResourceToControl(Control control, ComponentResourceManager cmp, System.Globalization.CultureInfo cultureInfo)
-        //{
-        //    foreach (Control child in control.Controls)
-        //    {
-        //        //Store current position and size of the control
-        //        var childSize = child.Size;
-        //        var childLoc = child.Location;
-        //        //Apply CultureInfo to child control
-        //        ApplyResourceToControl(child, cmp, cultureInfo);
-        //        //Restore position and size
-        //        child.Location = childLoc;
-        //        child.Size = childSize;
-        //    }
-        //    //Do the same with the parent control
-        //    var parentSize = control.Size;
-        //    var parentLoc = control.Location;
-        //    cmp.ApplyResources(control, control.Name, cultureInfo);
-        //    control.Location = parentLoc;
-        //    control.Size = parentSize;
-        //}
-
-        //private void ENButton_Click(object sender, EventArgs e)
-        //{
-        //    Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-GB");
-
-        //    ApplyResourceToControl(this, new ComponentResourceManager(typeof(GraphEditor)), new System.Globalization.CultureInfo("en-GB"));
-
-        //}
 
         private void WorkspacePictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
-                if (!isCreating)
+                if (isBeingMoved || isTriangleBeingMoved)   // && isChosen
                 {
-                    if (isBeingMoved && isChosen)
-                    {
-                        isBeingMoved = false;
-                        int nX = Points[iChosen].Loc.X;
-                        int nY = Points[iChosen].Loc.Y;
-                        int i = iChosen;
-                        if (Points[iChosen].Loc.X < 0)
-                            nX = -r / 2;
-                        else if (Points[iChosen].Loc.X > WorkspacePictureBox.Width)
-                            nX = WorkspacePictureBox.Width - r / 2;
+                    isBeingMoved = false;
+                    isTriangleBeingMoved = false;
+                    float nX = Points[iChosen].X;
+                    float nY = Points[iChosen].Y;
+                    int i = iChosen;
+                    if (Points[iChosen].X < 0)
+                        nX = -r / 2;
+                    else if (Points[iChosen].X > WorkspacePictureBox.Width)
+                        nX = WorkspacePictureBox.Width - r / 2;
 
-                        if (Points[iChosen].Loc.Y < 0)
-                            nY = -r / 2;
-                        else if (Points[iChosen].Loc.Y > WorkspacePictureBox.Height)
-                            nY = WorkspacePictureBox.Height - r / 2;
-                        
-                        Points[iChosen].Loc.X = nX;
-                        Points[iChosen].Loc.Y = nY;
+                    if (Points[iChosen].Y < 0)
+                        nY = -r / 2;
+                    else if (Points[iChosen].Y > WorkspacePictureBox.Height)
+                        nY = WorkspacePictureBox.Height - r / 2;
 
-                        if (isChosen && AutoRelCB.Checked && isAutoDoing)
-                        {
-                            if (isAutoNext == false)
-                            {
-                                if (isAutoHor)
-                                {
-                                    if (Points[iChosen].NRest != 1 && Points[Points[iChosen].IPrev].PRest != 1)
-                                    {
-                                        Points[iChosen].PRest = 1;
-                                        Points[Points[iChosen].IPrev].NRest = 1;
-                                    }
-                                }
-                                else
-                                {
-                                    if (Points[iChosen].NRest != 2 && Points[Points[iChosen].IPrev].PRest != 2)
-                                    {
-                                        Points[iChosen].PRest = 2;
-                                        Points[Points[iChosen].IPrev].NRest = 2;
-                                    }
-                                }
-                                isAutoDoing = false;
-                            }
-                            if (isAutoNext)
-                            {
-                                if (isAutoHor)
-                                {
-                                    if (Points[iChosen].PRest != 1 && Points[Points[iChosen].INext].NRest != 1)
-                                    {
-                                        Points[iChosen].NRest = 1;
-                                        Points[Points[iChosen].INext].PRest = 1;
-                                    }
-                                }
-                                else
-                                {
-                                    if (Points[iChosen].PRest != 2 && Points[Points[iChosen].INext].NRest != 2)
-                                    {
-                                        Points[iChosen].NRest = 2;
-                                        Points[Points[iChosen].INext].PRest = 2;
-                                    }
-                                }
-                                isAutoDoing = false;
-                            }
-                        }
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
 
-                        mousePos = e.Location;
-                        WorkspacePictureBox.Image.Dispose();
-                        WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                        CorrectPoint(iChosen, Points[iChosen].INext, true);
-                        RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-                    }
+                    mousePos = e.Location;
+                    
+                    WorkspacePictureBox.Refresh();
+                    FillScanLines();
                 }
+                
             }
         }
+        
 
         private void WorkspacePictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             
-            if (isBeingMoved && isChosen)
+            if (isBeingMoved)
             {
-                int i = iChosen;
-                int nX = Points[iChosen].Loc.X - mousePos.X + e.X;
-                int nY = Points[iChosen].Loc.Y - mousePos.Y + e.Y;
-                Points[iChosen].Loc.X = nX;
-                Points[iChosen].Loc.Y = nY;
-                isAutoDoing = false;
-
-                
-
-                if (AutoRelCB.Checked)
+                if (isChosen)
                 {
-                    if (Math.Abs(nY - Points[Points[iChosen].INext].Loc.Y) < 7)       // Horizontal first
+                    int i = iChosen;
+                    float nX = Points[iChosen].X - mousePos.X + e.X;
+                    float nY = Points[iChosen].Y - mousePos.Y + e.Y;
+                    Points[iChosen].X = nX;
+                    Points[iChosen].Y = nY;
+                }
+                else if (isTriangleBeingMoved)    // Moving all triangle
+                {
+                    int ind = iChosen < 3 ? 0 : 3;
+                    for (int i = 0; i < Points.Length / 2; i++)
                     {
-                        nY = Points[Points[iChosen].INext].Loc.Y;
-                        isAutoDoing = true;
-                        isAutoNext = true;
-                        isAutoHor = true;
+                        Points[i + ind].X = Points[i + ind].X - mousePos.X + e.X;
+                        Points[i + ind].Y = Points[i + ind].Y - mousePos.Y + e.Y;
                     }
-                    else if (Math.Abs(nX - Points[Points[iChosen].INext].Loc.X) < 7)
-                    {
-                        nX = Points[Points[iChosen].INext].Loc.X;
-                        isAutoDoing = true;
-                        isAutoNext = true;
-                        isAutoHor = false;
-                    }
-
-                    if (Math.Abs(nY - Points[Points[iChosen].IPrev].Loc.Y) < 7)
-                    {
-                        nY = Points[Points[iChosen].INext].Loc.Y;
-                        isAutoDoing = true;
-                        isAutoNext = false;
-                        isAutoHor = true;
-                    }
-                    else if (Math.Abs(nX - Points[Points[iChosen].IPrev].Loc.X) < 7)
-                    {
-                        nX = Points[Points[iChosen].INext].Loc.X;
-                        isAutoDoing = true;
-                        isAutoNext = false;
-                        isAutoHor = false;
-                    }
-
                 }
                 mousePos = e.Location;
-                
-            }
-            
-            WorkspacePictureBox.Image.Dispose();
-            WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-            if (isCreating)
-            {
-                if (Points.Count > 1 && AutoRelCB.Checked)
-                {
-                    if (Math.Abs(e.Location.Y - r/2 - Points[maxKey - 1].Loc.Y) < 7 && Points[maxKey - 1].PRest != 1)
-                    {
-                        DrawString("_", e.Location, Color.Black);
-                        
-                    }
-                    else if (Math.Abs(e.Location.X - r/2 - Points[maxKey - 1].Loc.X) < 7 && Points[maxKey - 1].PRest != 2)
-                    {
-                        DrawString("|", e.Location, Color.Black);
-                    }
-                }
-                
-            }
-            RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-        }
-
-        private void NoRestRB_CheckedChanged(object sender, EventArgs e) // iChosen set to point before edge
-        {
-            if (NoRestRB.Checked)
-            {
-                Points[iChosen].NRest = 0;
-                Points[Points[iChosen].INext].PRest = 0;
-                WorkspacePictureBox.Image.Dispose();
-                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                using (Graphics g = Graphics.FromImage(WorkspacePictureBox.Image))
-                    RedrawGraph(g);
-            }
-        }
-
-        private void HorizontalRB_CheckedChanged(object sender, EventArgs e)
-        {
-            // Check previous and following
-            if (HorizontalRB.Checked)
-            {
-                if (Points[iChosen].PRest != 1 && Points[Points[iChosen].INext].NRest != 1)
-                {
-                    Points[iChosen].NRest = 1;
-                    Points[Points[iChosen].INext].PRest = 1;
-                    WorkspacePictureBox.Image.Dispose();
-                    WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                    using (Graphics g = Graphics.FromImage(WorkspacePictureBox.Image))
-                        RedrawGraph(g);
-                }
-                else
-                {
-                    MessageBox.Show("There can't be two same restraints next to each other.", "ERROR");
-                }
-            }
-        }
-
-        private void VerticalRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (VerticalRB.Checked)
-            {
-                if (Points[iChosen].PRest != 2 && Points[Points[iChosen].INext].NRest != 2)
-                {
-                    Points[iChosen].NRest = 2;
-                    Points[Points[iChosen].INext].PRest = 2;
-                    WorkspacePictureBox.Image.Dispose();
-                    WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                    using (Graphics g = Graphics.FromImage(WorkspacePictureBox.Image))
-                        RedrawGraph(g);
-                }
-                else
-                {
-                    MessageBox.Show("There can't be two same restraints next to each other.", "ERROR");
-                }
-            }
-        }
-
-        private void ConstLenRB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ConstLenRB.Checked)
-            {
-                Points[iChosen].NRest = 3;
-                Points[Points[iChosen].INext].PRest = 3;
-                double edgeLength = Math.Sqrt((Points[iChosen].Loc.X - Points[Points[iChosen].INext].Loc.X) * (Points[iChosen].Loc.X - Points[Points[iChosen].INext].Loc.X) + (Points[iChosen].Loc.Y - Points[Points[iChosen].INext].Loc.Y) * (Points[iChosen].Loc.Y - Points[Points[iChosen].INext].Loc.Y));
-
-                double length = Prompt.ShowDialog("Wprowadź długość", "Długość krawędzi", edgeLength);
-                Points[iChosen].NLength = length > 0 ? length : 50;
-                WorkspacePictureBox.Image.Dispose();
-                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                using (Graphics g = Graphics.FromImage(WorkspacePictureBox.Image))
-                    RedrawGraph(g);
-            }
-        }
-
-        private void AddVerBut_Click(object sender, EventArgs e)
-        {
-            Points.Add(maxKey++, new MyPoint(
-                new Point((Points[iChosen].Loc.X + Points[Points[iChosen].INext].Loc.X) / 2,
-                          (Points[iChosen].Loc.Y + Points[Points[iChosen].INext].Loc.Y) / 2),
-                Points[iChosen].INext,
-                0,
-                iChosen,
-                0));
-            Points[Points[iChosen].INext].PRest = 0;
-            Points[Points[iChosen].INext].IPrev = maxKey - 1;
-            Points[iChosen].NRest = 0;
-            Points[iChosen].INext = maxKey - 1;
-            using (Graphics g = Graphics.FromImage(WorkspacePictureBox.Image))
-            {
-                WorkspacePictureBox.Image.Dispose();
-                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                RedrawGraph(g);
-            }
-        }
-
-
-        private void DeletePoint()
-        {
-            if (isChosen)
-            {
-                if (Points.Count <= 3)
-                {
-                    MessageBox.Show("Can't delete when there are less than 4 vertices.", "ERROR");
-                    return;
-                }
-
-                if (iChosen == 0)
-                {
-                    MessageBox.Show("Can't delete first vertex.", "ERROR");
-                    return;
-                }
-
-                Points[Points[iChosen].INext].IPrev = Points[iChosen].IPrev;
-                Points[Points[iChosen].INext].PRest = 0;
-                Points[Points[iChosen].IPrev].INext = Points[iChosen].INext;
-                Points[Points[iChosen].IPrev].NRest = 0;
-
-                Points.Remove(iChosen);
-
-                iChosen = -1;
-                isChosen = false;
-                WorkspacePictureBox.Image.Dispose();
-                WorkspacePictureBox.Image = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
-                RedrawGraph(Graphics.FromImage(WorkspacePictureBox.Image));
-                DeleteButton.Enabled = false;
-            }
-        }
-
-        public void CorrectPoint(int iPrev, int iNext, bool isNext) // iNext will be modified; isNext - which edge from iPrev should we check
-        {
-            int rest = isNext ? Points[iPrev].NRest : Points[iPrev].PRest;
-            double nLength = isNext ? Points[iPrev].NLength : Points[iNext].NLength;
-            double length, diff;
-            switch (rest)
-            {
-                case 1: // HORIZONTAL
-                    Points[iNext].Loc.Y = Points[iPrev].Loc.Y;
-                    break;
-
-                case 2: // VERTICAL
-                    Points[iNext].Loc.X = Points[iPrev].Loc.X;
-                    break;
-
-                case 3: // CONST. LENGTH
-                    length = Math.Sqrt((Points[iPrev].Loc.X - Points[iNext].Loc.X) * (Points[iPrev].Loc.X - Points[iNext].Loc.X) + (Points[iPrev].Loc.Y - Points[iNext].Loc.Y) * (Points[iPrev].Loc.Y - Points[iNext].Loc.Y));
-                    while (Math.Abs(diff = (length - nLength)) > 0.9)
-                    {
-                        if (diff > 0)
-                        {
-                            Points[iNext].Loc.X += Points[iNext].Loc.X - Points[iPrev].Loc.X > 0 ? -1 : 1;
-                            Points[iNext].Loc.Y += Points[iNext].Loc.Y - Points[iPrev].Loc.Y > 0 ? -1 : 1;
-                        }
-                        else // diff < 0
-                        {
-                            Points[iNext].Loc.X += Points[iNext].Loc.X - Points[iPrev].Loc.X > 0 ? 1 : -1;
-                            Points[iNext].Loc.Y += Points[iNext].Loc.Y - Points[iPrev].Loc.Y > 0 ? 1 : -1;
-                        }
-                        length = Math.Sqrt((Points[iPrev].Loc.X - Points[iNext].Loc.X) * (Points[iPrev].Loc.X - Points[iNext].Loc.X) + (Points[iPrev].Loc.Y - Points[iNext].Loc.Y) * (Points[iPrev].Loc.Y - Points[iNext].Loc.Y));
-                    }
-                    break;
-                default:
-
-                    break;
-            }
-        }
-
-        public bool IsOnLine(Point p1, Point p2, Point p, int width = 1)
-        {
-            bool isOnLine = false;
-            using (GraphicsPath path = new GraphicsPath())
-            {
-                using (var pen = new Pen(Brushes.Black, width))
-                {
-                    path.AddLine(new Point(p1.X + r / 2, p1.Y + r / 2), new Point(p2.X + r / 2, p2.Y + r / 2));
-                    isOnLine = path.IsOutlineVisible(p, pen);
-                }
-            }
-            return isOnLine;
-        }
-
-        public void DrawString(string s, Point p, Color color)
-        {
-            Graphics g = Graphics.FromImage(WorkspacePictureBox.Image);
-            Font drawFont = new Font("Consolas", 10);
-            SolidBrush drawBrush = new SolidBrush(color);
-            StringFormat drawFormat = new StringFormat();
-            g.DrawString(s, drawFont, drawBrush, p, drawFormat);
-            drawFont.Dispose();
-            drawBrush.Dispose();
-            g.Dispose();
-        }
-
-        public void BresenhamLine(int x, int y, int x2, int y2, Color color)
-        {
-            Graphics g = Graphics.FromImage(WorkspacePictureBox.Image);
-            int w = x2 - x;
-            int h = y2 - y;
-            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
-            if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
-            if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
-            if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
-            int longest = Math.Abs(w);
-            int shortest = Math.Abs(h);
-            if (!(longest > shortest))
-            {
-                longest = Math.Abs(h);
-                shortest = Math.Abs(w);
-                if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
-                dx2 = 0;
-            }
-            int numerator = longest >> 1;
-            for (int i = 0; i <= longest; i++)
-            {
-                //putpixel(x, y, color);
-                g.FillRectangle(new SolidBrush(color), x, y, 3, 3);
-                numerator += shortest;
-                if (!(numerator < longest))
-                {
-                    numerator -= longest;
-                    x += dx1;
-                    y += dy1;
-                }
-                else
-                {
-                    x += dx2;
-                    y += dy2;
-                }
+              
+                FillScanLines();
             }
         }
         
-    }
-
-    public class MyPoint
-    {
-        public Point Loc;
-        public int INext { get; set; }      // index of next point
-        public int NRest { get; set; }      // restraint of edge to next point
-        public int IPrev { get; set; }      // index of previous point
-        public int PRest { get; set; }      // restraint of edge to previous point
-        public double NLength { get; set; }    // constant length of next edge (if NRest == 3)
-
-        public MyPoint()
+        public void UpdateEdges()
         {
-            Loc = new Point();
-            INext = -1;
-            NRest = -1;
-            IPrev = -1;
-            PRest = -1;
-            NLength = 0;
+            float x1 = Points[0].X, y1 = Points[0].Y;
+            float x2 = Points[1].X, y2 = Points[1].Y;
+            float coef = (x2 - x1) / (y2 - y1);
+            MyEdge temp = new MyEdge(Math.Max(Points[0].Y, Points[1].Y), Points[Points[0].Y < Points[1].Y ? 0 : 1].X, coef, null);
+            int iNext;
+
+            float x3 = Points[3].X, y3 = Points[3].Y;
+            float x4 = Points[4].X, y4 = Points[4].Y;
+            float coef2 = (x4 - x3) / (y4 - y3);
+            MyEdge temp2 = new MyEdge(Math.Max(Points[3].Y, Points[4].Y), Points[Points[3].Y < Points[4].Y ? 3 : 4].X, coef2, null);
+            int iNext2;
+            
+            for (int i = 0; i < GET.Length; i++)
+            {
+                GET[i] = null;
+                GET2[i] = null;
+            }
+
+            GET[(int)Math.Min(Points[0].Y, Points[1].Y)] = temp;
+            GET2[(int)Math.Min(y3, y4)] = temp2;
+
+            for (int i = 1; i < Points.Length/2; i++)
+            {
+                if (i == 2)
+                {
+                    iNext = 0;
+                    iNext2 = 3;
+                }
+                else
+                {
+                    iNext = i + 1;
+                    iNext2 = iNext + 3;
+                }
+                x1 = Points[i].X;
+                y1 = Points[i].Y;
+                x2 = Points[iNext].X;
+                y2 = Points[iNext].Y;
+                coef = (x2 - x1) / (y2 - y1);
+                
+                x3 = Points[i+3].X;
+                y3 = Points[i+3].Y;
+                x4 = Points[iNext2].X;
+                y4 = Points[iNext2].Y;
+                coef2 = (x4 - x3) / (y4 - y3);
+                
+                int ind = (int)Math.Min(Points[i].Y, Points[iNext].Y);
+                if (Points[i].Y != Points[iNext].Y)
+                {
+                    if (GET[ind] == null)
+                        GET[ind] = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Points[Points[i].Y < Points[iNext].Y ? i : iNext].X, coef, null);
+                    else
+                    {
+                        temp = GET[ind];
+                        while (temp.Next != null)
+                        {
+                            temp = temp.Next;
+                        }
+                        temp.Next = new MyEdge(Math.Max(Points[i].Y, Points[iNext].Y), Points[Points[i].Y < Points[iNext].Y ? i : iNext].X, coef, null);
+                    }
+                }
+
+                int ind2 = (int)Math.Min(Points[i + 3].Y, Points[iNext2].Y);
+                if (Points[i+3].Y != Points[iNext2].Y)
+                {
+                    if (GET2[ind2] == null)
+                        GET2[ind2] = new MyEdge(Math.Max(Points[i+3].Y, Points[iNext2].Y), Points[Points[i+3].Y < Points[iNext2].Y ? i+3 : iNext2].X, coef2, null);
+                    else
+                    {
+                        temp = GET2[ind2];
+                        while (temp.Next != null)
+                        {
+                            temp = temp.Next;
+                        }
+                        temp.Next = new MyEdge(Math.Max(Points[i+3].Y, Points[iNext2].Y), Points[Points[i+3].Y < Points[iNext2].Y ? i+3 : iNext2].X, coef2, null);
+                    }
+                }
+            }
         }
 
-        public MyPoint(Point _point, int _iNext, int _nRest, int _iPrev, int _pRest)
+        public void FillScanLines()
         {
-            Loc = _point;
-            INext = _iNext;
-            NRest = _nRest;
-            IPrev = _iPrev;
-            PRest = _pRest;
-            NLength = 50;
+            int y = 0;
+            int R, G, B;
+
+            float cosNL;
+            float lighVectLen;
+            float normVectLen;
+            float distLen;
+            float refVectLen;
+            float refPointVectLen;
+            float cosVrVp;
+
+            float[] Vr = new float[3];
+            float[] Vp = new float[3];
+
+            Point RefPos = new Point(WorkspacePictureBox.Image.Width / 2, WorkspacePictureBox.Image.Height / 2);
+
+            Color objCol;
+            Color objCol2;
+            Color ligCol = LightColorBoxPB.BackColor;
+            Color normVectCol;
+            Color distPix;
+            Color distNX;
+            Color distNY;
+
+            MyEdge temp = null;
+            UpdateEdges();
+            Bitmap bitmap = new Bitmap(WorkspacePictureBox.Width, WorkspacePictureBox.Height);
+
+            while (GET[y] == null && GET2[y] == null) 
+                y++;
+            AET = null;
+            AET2 = null;
+            while (y < WorkspacePictureBox.Height) 
+            {
+                // Add lists from y bucket to AET
+                if (GET[y] != null && AET == null)
+                    AET = GET[y];
+                else if (AET != null)
+                {
+                    if (GET[y] != null)
+                    {
+                        temp = AET;
+                        while (temp.Next != null)
+                            temp = temp.Next;
+                        temp.Next = GET[y];
+                    }
+                    
+                    // Sort AET by x
+                    AET = MergeSort(AET);
+
+                    // TO_TEST Remove from AET elems for which y = yMax
+                    temp = AET;
+                    while (temp != null && temp.Next != null)
+                    {
+                        if (temp.Next.YMax <= y)
+                            temp.Next = temp.Next.Next;
+                        temp = temp.Next;
+                    }
+
+                    if (AET.YMax <= y)
+                        AET = AET.Next;
+
+                    if (AET!= null && AET.YMax <= y)
+                        AET = AET.Next;
+
+                    // Fill pixs between crossings
+                    temp = AET;
+                    
+                    while (temp != null && temp.Next != null)
+                    {
+                        for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
+                        {
+                            if (Tri1ColConstRB.Checked)
+                                objCol = Tri1ColorBoxPB.BackColor;
+                            else    // From texture
+                                objCol = tri1ColText.GetPixel(i % (tri1ColText.Width - 1) + 1, y % (tri1ColText.Height - 1) + 1);
+
+                            Point mouse = PointToClient(MousePosition);
+
+                            // Bąbelek aka "bubble"
+                            if (BubbleCB.Checked && (i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
+                            {
+                                // Oblicznie wektorów bąbelka
+                                N[2] = (float)Math.Sqrt(r*r - Math.Sqrt(i*i+y*y));
+                                N[0] = (i - mouse.X) / N[2];
+                                N[1] = (y - mouse.Y) / N[2];
+                                N[2] /= N[2];
+                            }
+                            else if (NormalVectTextRB.Checked)
+                            {
+                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                N[2] = normVectCol.B;
+                                N[0] = (normVectCol.R - 127) / N[2];
+                                N[1] = (normVectCol.G - 127) / N[2];
+                                N[2] /= N[2];
+                            }
+                            else
+                                N = new float[] { 0, 0, 1 };
+                            
+                            if (DisturbTextRB.Checked)
+                            {
+                                distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
+                                distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
+                                distNY = disturbText.GetPixel(i % (disturbText.Width), (y + 1) % (disturbText.Height));
+
+                                D[0] = 1 * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[1] = 1 * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[2] = -N[0] * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3 - N[1] * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                distLen = (float)Math.Sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
+                                if (distLen != 0)
+                                {
+                                    D[0] /= distLen;
+                                    D[1] /= distLen;
+                                    D[2] /= distLen;
+                                }
+                            }
+                            
+                            Np[0] = N[0] + D[0];
+                            Np[1] = N[1] + D[1];
+                            Np[2] = N[2] + D[2];
+                            normVectLen = (float)Math.Sqrt(Np[0] * Np[0] + Np[1] * Np[1] + Np[2] * Np[2]);
+
+                            Np[0] /= normVectLen;
+                            Np[1] /= normVectLen;
+                            Np[2] /= normVectLen;
+
+                            if(LighSourVectAnimRB.Checked) 
+                            {
+                                L[0] = lightPos[0] - i;
+                                L[1] = lightPos[1] - y;
+                                L[2] = 100f;
+                                lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
+
+                                L[0] /= lighVectLen;
+                                L[1] /= lighVectLen;
+                                L[2] /= lighVectLen;
+                            }
+
+                            cosNL = Math.Max(0,(Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]));
+
+                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
+                            R = (int)(objCol.R / 255f * ligCol.R * cosNL);
+                            G = (int)(objCol.G / 255f * ligCol.G * cosNL);
+                            B = (int)(objCol.B / 255f * ligCol.B * cosNL);
+
+                            if (ReflectorCB.Checked)
+                            {
+                                Vr[0] = mouse.X - RefPos.X;
+                                Vr[1] = mouse.Y - RefPos.Y;
+                                Vr[2] = refHeight;
+                                refVectLen = (float)Math.Sqrt(Vr[0] * Vr[0] + Vr[1] * Vr[1] + Vr[2] * Vr[2]);
+                                Vr[0] /= refVectLen;
+                                Vr[1] /= refVectLen;
+                                Vr[2] /= refVectLen;
+
+                                Vp[0] = i - RefPos.X;
+                                Vp[1] = y - RefPos.Y;
+                                Vp[2] = refHeight;
+                                refPointVectLen = (float)Math.Sqrt(Vp[0] * Vp[0] + Vp[1] * Vp[1] + Vp[2] * Vp[2]);
+                                Vp[0] /= refPointVectLen;
+                                Vp[1] /= refPointVectLen;
+                                Vp[2] /= refPointVectLen;
+
+                                cosVrVp = Vr[0] * Vp[0] + Vr[1] * Vp[1] + Vr[2] * Vp[2];
+                                cosVrVp = (float)Math.Pow(cosVrVp, K);
+                                R = (int)(R * (1+cosVrVp));
+                                G = (int)(G * (1+cosVrVp));
+                                B = (int)(B * (1+cosVrVp));
+                                if (R > 255) R = 255;
+                                if (G > 255) G = 255;
+                                if (B > 255) B = 255;
+                            }
+
+                            bitmap.SetPixel(i, y, Color.FromArgb(R,G,B));
+                        }
+                        temp = temp.Next.Next;
+                    }
+                    // For each edge in AET update x (x+=1/m)
+                    temp = AET;
+                    while (temp != null)
+                    {
+                        temp.XMin += temp.Coefficient;
+                        temp = temp.Next;
+                    }
+                }
+
+                // TRIANGLE no 2, not DRY
+                temp = null;
+                // Add lists from y bucket to AET
+                if (GET2[y] != null && AET2 == null)
+                    AET2 = GET2[y];
+                else if (AET2 != null)
+                {
+                    if (GET2[y] != null)
+                    {
+                        temp = AET2;
+                        while (temp.Next != null)
+                            temp = temp.Next;
+                        temp.Next = GET2[y];
+                    }
+
+                    // Sort AET by x
+                    AET2 = MergeSort(AET2);
+
+                    // TO_TEST Remove from AET elems for which y = yMax
+                    temp = AET2;
+                    while (temp != null && temp.Next != null)
+                    {
+                        if (temp.Next.YMax <= y)
+                            temp.Next = temp.Next.Next;
+                        temp = temp.Next;
+                    }
+
+                    if (AET2.YMax <= y)
+                        AET2 = AET2.Next;
+
+                    if (AET2 != null && AET2.YMax <= y)
+                        AET2 = AET2.Next;
+
+                    // Fill pixs between crossings
+                    temp = AET2;
+
+                    while (temp != null && temp.Next != null)
+                    {
+                        for (int i = (int)temp.XMin; i < temp.Next.XMin; i++)
+                        {
+                            if (Tri2ColConstRB.Checked)
+                                objCol2 = Tri2ColorBoxPB.BackColor;
+                            else    // From texture
+                                objCol2 = tri2ColText.GetPixel(i % (tri2ColText.Width - 1) + 1, y % (tri2ColText.Height - 1) + 1);
+
+                            Point mouse = PointToClient(MousePosition);
+                            // Bąbelek aka "bubble"
+                            if (BubbleCB.Checked && (i - PointToClient(MousePosition).X) * (i - PointToClient(MousePosition).X) + (y - PointToClient(MousePosition).Y) * (y - PointToClient(MousePosition).Y) <= r * r)
+                            {
+                               
+
+                                N[2] = (float)Math.Sqrt(r * r - Math.Sqrt(i * i + y * y));
+                                N[0] = (i - mouse.X) / N[2];
+                                N[1] = (y - mouse.Y) / N[2];
+                                N[2] /= N[2];
+
+                            }
+                            else if (NormalVectTextRB.Checked)
+                            {
+                                normVectCol = normVectText.GetPixel(i % (normVectText.Width), y % (normVectText.Height));
+                                N[2] = normVectCol.B;
+                                N[0] = (normVectCol.R - 127) / N[2];
+                                N[1] = (normVectCol.G - 127) / N[2];
+                                N[2] /= N[2];
+                            }
+                            else
+                                N = new float[] { 0, 0, 1 };
+                            
+                            if (DisturbTextRB.Checked)
+                            {
+                                distPix = disturbText.GetPixel(i % (disturbText.Width), y % (disturbText.Height));
+                                distNX = disturbText.GetPixel((i + 1) % (disturbText.Width), y % (disturbText.Height));
+                                distNY = disturbText.GetPixel(i % (disturbText.Width), (y + 1) % (disturbText.Height));
+
+                                D[0] = 1 * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[1] = 1 * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                D[2] = -N[0] * ((distNX.R + distNX.G + distNX.B) - (distPix.R + distPix.G + distPix.B)) / 3 - N[1] * ((distNY.R + distNY.G + distNY.B) - (distPix.R + distPix.G + distPix.B)) / 3;
+                                distLen = (float)Math.Sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
+                                if (distLen != 0)
+                                {
+                                    D[0] /= distLen;
+                                    D[1] /= distLen;
+                                    D[2] /= distLen;
+                                }
+                            }
+
+
+                            Np[0] = N[0] + D[0];
+                            Np[1] = N[1] + D[1];
+                            Np[2] = N[2] + D[2];
+                            normVectLen = (float)Math.Sqrt(Np[0] * Np[0] + Np[1] * Np[1] + Np[2] * Np[2]);
+
+                            Np[0] /= normVectLen;
+                            Np[1] /= normVectLen;
+                            Np[2] /= normVectLen;
+
+                            if (LighSourVectAnimRB.Checked)
+                            {
+                                L[0] = lightPos[0] - i;
+                                L[1] = lightPos[1] - y;
+                                L[2] = 100f;
+                                lighVectLen = (float)Math.Sqrt(L[0] * L[0] + L[1] * L[1] + L[2] * L[2]);
+
+                                L[0] /= lighVectLen;
+                                L[1] /= lighVectLen;
+                                L[2] /= lighVectLen;
+                            }
+
+                            cosNL = Math.Max(0, (Np[0] * L[0] + Np[1] * L[1] + Np[2] * L[2]));
+
+                            // Normalized (both divided by 255) and denormalized (result multiplied by 255)
+                            R = (int)(objCol2.R / 255f * ligCol.R * cosNL);
+                            G = (int)(objCol2.G / 255f * ligCol.G * cosNL);
+                            B = (int)(objCol2.B / 255f * ligCol.B * cosNL);
+
+
+                            if (ReflectorCB.Checked)
+                            {
+                                Vr[0] = mouse.X - RefPos.X;
+                                Vr[1] = mouse.Y - RefPos.Y;
+                                Vr[2] = refHeight;
+                                refVectLen = (float)Math.Sqrt(Vr[0] * Vr[0] + Vr[1] * Vr[1] + Vr[2] * Vr[2]);
+                                Vr[0] /= refVectLen;
+                                Vr[1] /= refVectLen;
+                                Vr[2] /= refVectLen;
+
+                                Vp[0] = i - RefPos.X;
+                                Vp[1] = y - RefPos.Y;
+                                Vp[2] = refHeight;
+                                refPointVectLen = (float)Math.Sqrt(Vp[0] * Vp[0] + Vp[1] * Vp[1] + Vp[2] * Vp[2]);
+                                Vp[0] /= refPointVectLen;
+                                Vp[1] /= refPointVectLen;
+                                Vp[2] /= refPointVectLen;
+
+                                cosVrVp = Vr[0] * Vp[0] + Vr[1] * Vp[1] + Vr[2] * Vp[2];
+                                cosVrVp = (float)Math.Pow(cosVrVp, K);
+                                R = (int)(R * (1 + cosVrVp));
+                                G = (int)(G * (1 + cosVrVp));
+                                B = (int)(B * (1 + cosVrVp));
+                                if (R > 255) R = 255;
+                                if (G > 255) G = 255;
+                                if (B > 255) B = 255;
+                            }
+
+                            bitmap.SetPixel(i, y, Color.FromArgb(R, G, B));
+                        }
+                        temp = temp.Next.Next;
+                    }
+                    // For each edge in AET update x (x+=1/m)
+                    temp = AET2;
+                    while (temp != null)
+                    {
+                        temp.XMin += temp.Coefficient;
+                        temp = temp.Next;
+                    }
+                }
+                y++;
+            }
+            WorkspacePictureBox.Image.Dispose();
+            WorkspacePictureBox.Image = bitmap;
+            
+        }
+
+        public MyEdge MergeSort(MyEdge head)
+        {
+            if (head == null || head.Next == null) { return head; }
+            MyEdge middle = GetMiddle(head);      //get the middle of the list
+            MyEdge sHalf = middle.Next;
+            middle.Next = null;   //split the list into two halfs
+
+            return Merge(MergeSort(head), MergeSort(sHalf));  //recurse on that
+        }
+
+        //Merge subroutine to merge two sorted lists
+        public MyEdge Merge(MyEdge a, MyEdge b)
+        {
+            MyEdge dummyHead = new MyEdge();
+            MyEdge curr = dummyHead;
+            while (a != null && b != null)
+            {
+                if (a.XMin <= b.XMin) { curr.Next = a; a = a.Next; }
+                else { curr.Next = b; b = b.Next; }
+                curr = curr.Next;
+            }
+            curr.Next = (a == null) ? b : a;
+            return dummyHead.Next;
+        }
+
+        //Finding the middle element of the list for splitting
+        public MyEdge GetMiddle(MyEdge head)
+        {
+            if (head == null) { return head; }
+            MyEdge slow, fast; slow = fast = head;
+            while (fast.Next != null && fast.Next.Next != null)
+            {
+                slow = slow.Next; fast = fast.Next.Next;
+            }
+            return slow;
+        }
+
+        private void WorkspacePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+
+        private void Tri1ColorBoxPB_Click(object sender, EventArgs e)
+        {
+            if (Tri1ColConstRB.Checked)
+            {
+                ColorDialog cd = new ColorDialog();
+
+                if (cd.ShowDialog() == DialogResult.OK)
+                {
+                    Tri1ColorBoxPB.BackColor = cd.Color;
+
+                    FillScanLines();
+                }
+            }
+        }
+
+        private void ColorBoxPB_Click(object sender, EventArgs e)
+        {
+            if (Tri2ColConstRB.Checked)
+            {
+                ColorDialog cd = new ColorDialog();
+
+                if (cd.ShowDialog() == DialogResult.OK)
+                {
+                    Tri2ColorBoxPB.BackColor = cd.Color;
+
+                    FillScanLines();
+                }
+            }
+        }
+
+        private void LightColorBoxPB_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+
+            if (cd.ShowDialog() == DialogResult.OK)
+            {
+                LightColorBoxPB.BackColor = cd.Color;
+
+                FillScanLines();
+
+            }
+        }
+
+        private void Tri1ColTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            FillScanLines();
+        }
+
+        private void ObjColTextRB_CheckedChanged(object sender, EventArgs e)
+        {
+            // Triangle no 2
+            FillScanLines();
+        }
+        
+
+        private void DisturbNoRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DisturbNoRB.Checked)
+            {
+                for (int i = 0; i < D.Length; i++)
+                {
+                    D[i] = 0;
+                    Np[i] = N[i] / N[2];
+                }
+                FillScanLines();
+            }
+        }
+
+        private void NormalVectConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if(NormalVectConstRB.Checked)
+            {
+                N = new float[] { 0, 0, 1 };
+
+                for (int i = 0; i<Np.Length; i++)
+                    Np[i] = N[i] + D[i];
+
+                for (int i = 0; i < Np.Length; i++)
+                    Np[i] = Np[i] / Np[2];
+
+                FillScanLines();
+            }
+        }
+        
+        private void LighSourVectConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (LighSourVectConstRB.Checked)
+            {
+                L = new float[] { 0, 0, 1 };
+                FillScanLines();
+            }
+        }
+
+        private void LighSourVectAnimRB_CheckedChanged(object sender, EventArgs e)
+        {
+            if(LighSourVectAnimRB.Checked)
+            {
+                lightPos = new float[] { 0.5f, 0.25f, 1 };
+                FillScanLines();
+            }
+        }
+
+        public Bitmap OpenImage()
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Title = "Open Image";
+                dlg.Filter = "bmp files (*.bmp)|*.bmp|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    return new Bitmap(dlg.FileName);
+                }
+            }
+            return Properties.Resources.brick_normalmap;
+        }
+        
+        private void Tri1ColTextPB_Click(object sender, EventArgs e)
+        {
+            if (Tri1ColTextRB.Checked)
+            {
+                tri1ColText = new DirectBitmap(new Bitmap(ScaleImage(OpenImage(), WorkspacePictureBox.Width,WorkspacePictureBox.Height)));
+                Tri1ColTextPB.BackgroundImage = tri1ColText.Bitmap;
+                FillScanLines();
+            }
+        }
+
+        private void ObjColTextPB_Click(object sender, EventArgs e)
+        {
+            if (Tri2ColTextRB.Checked)
+            {
+                tri2ColText = new DirectBitmap(OpenImage());
+                Tri2ColTextPB.BackgroundImage = tri2ColText.Bitmap;
+                FillScanLines();
+            }
+        }
+
+        private void Tri1ColConstRB_CheckedChanged(object sender, EventArgs e)
+        {
+            FillScanLines();
+        }
+
+
+        private void NormVectTextPB_Click(object sender, EventArgs e)
+        {
+            if (NormalVectTextRB.Checked)
+            {
+                normVectText = new DirectBitmap(OpenImage());
+                NormVectTextPB.BackgroundImage = normVectText.Bitmap;
+                FillScanLines();
+            }
+        }
+
+        private void DisturbTextPB_Click(object sender, EventArgs e)
+        {
+            if (DisturbTextRB.Checked)
+            {
+                disturbText = new DirectBitmap(OpenImage());
+                DisturbTextPB.BackgroundImage = disturbText.Bitmap;
+                FillScanLines();
+            }
+        }
+        
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            rad = Math.Min(WorkspacePictureBox.Height, WorkspacePictureBox.Width) / 3;
+            if (LighSourVectAnimRB.Checked)
+            {
+                lightPos[0] = (float)(rad * Math.Cos(angle * Math.PI / 180f)) + WorkspacePictureBox.Width / 2;
+                lightPos[1] = (float)(rad * Math.Sin(angle * Math.PI / 180f)) + WorkspacePictureBox.Height / 2;
+                if (angle < 360)
+                    angle += 10f;
+                else
+                    angle = 0;
+            }
+            FillScanLines();
+
+        }
+
+        private void ReflectorCB_CheckedChanged(object sender, EventArgs e)
+        {
+            FillScanLines();
+        }
+
+        private void ReflectorCB_Click(object sender, EventArgs e)
+        {
+            if(ReflectorCB.Checked)
+            {
+                refHeight = (int)Prompt.ShowDialog("Wprowadź wysokość reflektora", "H - wysokość reflektora", refHeight);
+                K = (int)Prompt.ShowDialog("Wprowadź potęgę cosinusa dla reflektora", "K - potęga cosinusa", K);
+            }
         }
     }
 
@@ -894,6 +931,4 @@ namespace GK_P2_Filling
             return Decimal.ToDouble(inputBox.Value);
         }
     }
-
-
 }

@@ -28,30 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.WorkspacePictureBox = new System.Windows.Forms.PictureBox();
             this.EditionGroupBox = new System.Windows.Forms.GroupBox();
-            this.AddVerBut = new System.Windows.Forms.Button();
-            this.edgesGB = new System.Windows.Forms.GroupBox();
-            this.ConstLenRB = new System.Windows.Forms.RadioButton();
-            this.VerticalRB = new System.Windows.Forms.RadioButton();
-            this.HorizontalRB = new System.Windows.Forms.RadioButton();
-            this.NoRestRB = new System.Windows.Forms.RadioButton();
-            this.DeleteButton = new System.Windows.Forms.Button();
-            this.ClearButton = new System.Windows.Forms.Button();
-            this.ImportExportGroupBox = new System.Windows.Forms.GroupBox();
-            this.OpenButton = new System.Windows.Forms.Button();
-            this.SaveButton = new System.Windows.Forms.Button();
-            this.AutoRelCB = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Triangle1GB = new System.Windows.Forms.GroupBox();
+            this.Tri1ColTextPB = new System.Windows.Forms.PictureBox();
+            this.Tri1ColTextRB = new System.Windows.Forms.RadioButton();
+            this.Tri1ColConstRB = new System.Windows.Forms.RadioButton();
+            this.Tri1ColorBoxPB = new System.Windows.Forms.PictureBox();
+            this.Triangle2GB = new System.Windows.Forms.GroupBox();
+            this.Tri2ColTextPB = new System.Windows.Forms.PictureBox();
+            this.Tri2ColTextRB = new System.Windows.Forms.RadioButton();
+            this.Tri2ColConstRB = new System.Windows.Forms.RadioButton();
+            this.Tri2ColorBoxPB = new System.Windows.Forms.PictureBox();
+            this.LighSourVectGB = new System.Windows.Forms.GroupBox();
+            this.ReflectorCB = new System.Windows.Forms.CheckBox();
+            this.LighSourVectAnimRB = new System.Windows.Forms.RadioButton();
+            this.LighSourVectConstRB = new System.Windows.Forms.RadioButton();
+            this.NormalVectWDGB = new System.Windows.Forms.GroupBox();
+            this.DisturbanceGB = new System.Windows.Forms.GroupBox();
+            this.DisturbTextPB = new System.Windows.Forms.PictureBox();
+            this.DisturbTextRB = new System.Windows.Forms.RadioButton();
+            this.DisturbNoRB = new System.Windows.Forms.RadioButton();
+            this.NormalVectGB = new System.Windows.Forms.GroupBox();
+            this.NormVectTextPB = new System.Windows.Forms.PictureBox();
+            this.NormalVectTextRB = new System.Windows.Forms.RadioButton();
+            this.NormalVectConstRB = new System.Windows.Forms.RadioButton();
+            this.LightColorGB = new System.Windows.Forms.GroupBox();
+            this.LightColorBoxPB = new System.Windows.Forms.PictureBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.BubbleCB = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).BeginInit();
             this.EditionGroupBox.SuspendLayout();
-            this.edgesGB.SuspendLayout();
-            this.ImportExportGroupBox.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.Triangle1GB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColTextPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColorBoxPB)).BeginInit();
+            this.Triangle2GB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColTextPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColorBoxPB)).BeginInit();
+            this.LighSourVectGB.SuspendLayout();
+            this.NormalVectWDGB.SuspendLayout();
+            this.DisturbanceGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisturbTextPB)).BeginInit();
+            this.NormalVectGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NormVectTextPB)).BeginInit();
+            this.LightColorGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LightColorBoxPB)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -66,7 +96,6 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.EditionGroupBox);
-            this.splitContainer1.Panel2.Controls.Add(this.ImportExportGroupBox);
             this.splitContainer1.TabStop = false;
             // 
             // WorkspacePictureBox
@@ -77,6 +106,7 @@
             this.WorkspacePictureBox.Name = "WorkspacePictureBox";
             this.WorkspacePictureBox.TabStop = false;
             this.WorkspacePictureBox.SizeChanged += new System.EventHandler(this.WorkspacePictureBox_SizeChanged);
+            this.WorkspacePictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.WorkspacePictureBox_Paint);
             this.WorkspacePictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WorkspacePictureBox_MouseDown);
             this.WorkspacePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WorkspacePictureBox_MouseMove);
             this.WorkspacePictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WorkspacePictureBox_MouseUp);
@@ -84,121 +114,270 @@
             // EditionGroupBox
             // 
             resources.ApplyResources(this.EditionGroupBox, "EditionGroupBox");
-            this.EditionGroupBox.Controls.Add(this.AddVerBut);
-            this.EditionGroupBox.Controls.Add(this.edgesGB);
-            this.EditionGroupBox.Controls.Add(this.DeleteButton);
-            this.EditionGroupBox.Controls.Add(this.ClearButton);
+            this.EditionGroupBox.Controls.Add(this.groupBox2);
+            this.EditionGroupBox.Controls.Add(this.LighSourVectGB);
+            this.EditionGroupBox.Controls.Add(this.NormalVectWDGB);
+            this.EditionGroupBox.Controls.Add(this.LightColorGB);
             this.EditionGroupBox.Name = "EditionGroupBox";
             this.EditionGroupBox.TabStop = false;
             // 
-            // AddVerBut
+            // groupBox2
             // 
-            resources.ApplyResources(this.AddVerBut, "AddVerBut");
-            this.AddVerBut.Name = "AddVerBut";
-            this.AddVerBut.UseVisualStyleBackColor = true;
-            this.AddVerBut.Click += new System.EventHandler(this.AddVerBut_Click);
+            this.groupBox2.Controls.Add(this.Triangle1GB);
+            this.groupBox2.Controls.Add(this.Triangle2GB);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.TabStop = false;
             // 
-            // edgesGB
+            // Triangle1GB
             // 
-            this.edgesGB.Controls.Add(this.AutoRelCB);
-            this.edgesGB.Controls.Add(this.ConstLenRB);
-            this.edgesGB.Controls.Add(this.VerticalRB);
-            this.edgesGB.Controls.Add(this.HorizontalRB);
-            this.edgesGB.Controls.Add(this.NoRestRB);
-            resources.ApplyResources(this.edgesGB, "edgesGB");
-            this.edgesGB.Name = "edgesGB";
-            this.edgesGB.TabStop = false;
+            this.Triangle1GB.Controls.Add(this.Tri1ColTextPB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColTextRB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColConstRB);
+            this.Triangle1GB.Controls.Add(this.Tri1ColorBoxPB);
+            resources.ApplyResources(this.Triangle1GB, "Triangle1GB");
+            this.Triangle1GB.Name = "Triangle1GB";
+            this.Triangle1GB.TabStop = false;
             // 
-            // ConstLenRB
+            // Tri1ColTextPB
             // 
-            resources.ApplyResources(this.ConstLenRB, "ConstLenRB");
-            this.ConstLenRB.Name = "ConstLenRB";
-            this.ConstLenRB.UseVisualStyleBackColor = true;
-            this.ConstLenRB.CheckedChanged += new System.EventHandler(this.ConstLenRB_CheckedChanged);
+            this.Tri1ColTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri1ColTextPB, "Tri1ColTextPB");
+            this.Tri1ColTextPB.Name = "Tri1ColTextPB";
+            this.Tri1ColTextPB.TabStop = false;
+            this.Tri1ColTextPB.Click += new System.EventHandler(this.Tri1ColTextPB_Click);
             // 
-            // VerticalRB
+            // Tri1ColTextRB
             // 
-            resources.ApplyResources(this.VerticalRB, "VerticalRB");
-            this.VerticalRB.Name = "VerticalRB";
-            this.VerticalRB.UseVisualStyleBackColor = true;
-            this.VerticalRB.CheckedChanged += new System.EventHandler(this.VerticalRB_CheckedChanged);
+            resources.ApplyResources(this.Tri1ColTextRB, "Tri1ColTextRB");
+            this.Tri1ColTextRB.Checked = true;
+            this.Tri1ColTextRB.Name = "Tri1ColTextRB";
+            this.Tri1ColTextRB.TabStop = true;
+            this.Tri1ColTextRB.UseVisualStyleBackColor = true;
+            this.Tri1ColTextRB.CheckedChanged += new System.EventHandler(this.Tri1ColTextRB_CheckedChanged);
             // 
-            // HorizontalRB
+            // Tri1ColConstRB
             // 
-            resources.ApplyResources(this.HorizontalRB, "HorizontalRB");
-            this.HorizontalRB.Name = "HorizontalRB";
-            this.HorizontalRB.UseVisualStyleBackColor = true;
-            this.HorizontalRB.CheckedChanged += new System.EventHandler(this.HorizontalRB_CheckedChanged);
+            resources.ApplyResources(this.Tri1ColConstRB, "Tri1ColConstRB");
+            this.Tri1ColConstRB.Name = "Tri1ColConstRB";
+            this.Tri1ColConstRB.UseVisualStyleBackColor = true;
+            this.Tri1ColConstRB.CheckedChanged += new System.EventHandler(this.Tri1ColConstRB_CheckedChanged);
             // 
-            // NoRestRB
+            // Tri1ColorBoxPB
             // 
-            resources.ApplyResources(this.NoRestRB, "NoRestRB");
-            this.NoRestRB.Checked = true;
-            this.NoRestRB.Name = "NoRestRB";
-            this.NoRestRB.TabStop = true;
-            this.NoRestRB.UseVisualStyleBackColor = true;
-            this.NoRestRB.CheckedChanged += new System.EventHandler(this.NoRestRB_CheckedChanged);
+            this.Tri1ColorBoxPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri1ColorBoxPB, "Tri1ColorBoxPB");
+            this.Tri1ColorBoxPB.Name = "Tri1ColorBoxPB";
+            this.Tri1ColorBoxPB.TabStop = false;
+            this.Tri1ColorBoxPB.Click += new System.EventHandler(this.Tri1ColorBoxPB_Click);
             // 
-            // DeleteButton
+            // Triangle2GB
             // 
-            resources.ApplyResources(this.DeleteButton, "DeleteButton");
-            this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.UseVisualStyleBackColor = true;
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            this.Triangle2GB.Controls.Add(this.Tri2ColTextPB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColTextRB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColConstRB);
+            this.Triangle2GB.Controls.Add(this.Tri2ColorBoxPB);
+            resources.ApplyResources(this.Triangle2GB, "Triangle2GB");
+            this.Triangle2GB.Name = "Triangle2GB";
+            this.Triangle2GB.TabStop = false;
             // 
-            // ClearButton
+            // Tri2ColTextPB
             // 
-            resources.ApplyResources(this.ClearButton, "ClearButton");
-            this.ClearButton.Name = "ClearButton";
-            this.ClearButton.UseVisualStyleBackColor = true;
-            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            this.Tri2ColTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri2ColTextPB, "Tri2ColTextPB");
+            this.Tri2ColTextPB.Name = "Tri2ColTextPB";
+            this.Tri2ColTextPB.TabStop = false;
+            this.Tri2ColTextPB.Click += new System.EventHandler(this.ObjColTextPB_Click);
             // 
-            // ImportExportGroupBox
+            // Tri2ColTextRB
             // 
-            resources.ApplyResources(this.ImportExportGroupBox, "ImportExportGroupBox");
-            this.ImportExportGroupBox.Controls.Add(this.OpenButton);
-            this.ImportExportGroupBox.Controls.Add(this.SaveButton);
-            this.ImportExportGroupBox.Name = "ImportExportGroupBox";
-            this.ImportExportGroupBox.TabStop = false;
+            resources.ApplyResources(this.Tri2ColTextRB, "Tri2ColTextRB");
+            this.Tri2ColTextRB.Checked = true;
+            this.Tri2ColTextRB.Name = "Tri2ColTextRB";
+            this.Tri2ColTextRB.TabStop = true;
+            this.Tri2ColTextRB.UseVisualStyleBackColor = true;
+            this.Tri2ColTextRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
             // 
-            // OpenButton
+            // Tri2ColConstRB
             // 
-            resources.ApplyResources(this.OpenButton, "OpenButton");
-            this.OpenButton.Name = "OpenButton";
-            this.OpenButton.UseVisualStyleBackColor = true;
-            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
+            resources.ApplyResources(this.Tri2ColConstRB, "Tri2ColConstRB");
+            this.Tri2ColConstRB.Name = "Tri2ColConstRB";
+            this.Tri2ColConstRB.UseVisualStyleBackColor = true;
+            this.Tri2ColConstRB.CheckedChanged += new System.EventHandler(this.ObjColTextRB_CheckedChanged);
             // 
-            // SaveButton
+            // Tri2ColorBoxPB
             // 
-            resources.ApplyResources(this.SaveButton, "SaveButton");
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.UseVisualStyleBackColor = true;
-            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            this.Tri2ColorBoxPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.Tri2ColorBoxPB, "Tri2ColorBoxPB");
+            this.Tri2ColorBoxPB.Name = "Tri2ColorBoxPB";
+            this.Tri2ColorBoxPB.TabStop = false;
+            this.Tri2ColorBoxPB.Click += new System.EventHandler(this.ColorBoxPB_Click);
             // 
-            // AutoRelCB
+            // LighSourVectGB
             // 
-            resources.ApplyResources(this.AutoRelCB, "AutoRelCB");
-            this.AutoRelCB.Name = "AutoRelCB";
-            this.AutoRelCB.UseVisualStyleBackColor = true;
+            this.LighSourVectGB.Controls.Add(this.BubbleCB);
+            this.LighSourVectGB.Controls.Add(this.ReflectorCB);
+            this.LighSourVectGB.Controls.Add(this.LighSourVectAnimRB);
+            this.LighSourVectGB.Controls.Add(this.LighSourVectConstRB);
+            resources.ApplyResources(this.LighSourVectGB, "LighSourVectGB");
+            this.LighSourVectGB.Name = "LighSourVectGB";
+            this.LighSourVectGB.TabStop = false;
             // 
-            // GraphEditor
+            // ReflectorCB
+            // 
+            resources.ApplyResources(this.ReflectorCB, "ReflectorCB");
+            this.ReflectorCB.Name = "ReflectorCB";
+            this.ReflectorCB.UseVisualStyleBackColor = true;
+            this.ReflectorCB.CheckedChanged += new System.EventHandler(this.ReflectorCB_CheckedChanged);
+            this.ReflectorCB.Click += new System.EventHandler(this.ReflectorCB_Click);
+            // 
+            // LighSourVectAnimRB
+            // 
+            resources.ApplyResources(this.LighSourVectAnimRB, "LighSourVectAnimRB");
+            this.LighSourVectAnimRB.Name = "LighSourVectAnimRB";
+            this.LighSourVectAnimRB.UseVisualStyleBackColor = true;
+            this.LighSourVectAnimRB.CheckedChanged += new System.EventHandler(this.LighSourVectAnimRB_CheckedChanged);
+            // 
+            // LighSourVectConstRB
+            // 
+            resources.ApplyResources(this.LighSourVectConstRB, "LighSourVectConstRB");
+            this.LighSourVectConstRB.Checked = true;
+            this.LighSourVectConstRB.Name = "LighSourVectConstRB";
+            this.LighSourVectConstRB.TabStop = true;
+            this.LighSourVectConstRB.UseVisualStyleBackColor = true;
+            this.LighSourVectConstRB.CheckedChanged += new System.EventHandler(this.LighSourVectConstRB_CheckedChanged);
+            // 
+            // NormalVectWDGB
+            // 
+            this.NormalVectWDGB.Controls.Add(this.DisturbanceGB);
+            this.NormalVectWDGB.Controls.Add(this.NormalVectGB);
+            resources.ApplyResources(this.NormalVectWDGB, "NormalVectWDGB");
+            this.NormalVectWDGB.Name = "NormalVectWDGB";
+            this.NormalVectWDGB.TabStop = false;
+            // 
+            // DisturbanceGB
+            // 
+            this.DisturbanceGB.Controls.Add(this.DisturbTextPB);
+            this.DisturbanceGB.Controls.Add(this.DisturbTextRB);
+            this.DisturbanceGB.Controls.Add(this.DisturbNoRB);
+            resources.ApplyResources(this.DisturbanceGB, "DisturbanceGB");
+            this.DisturbanceGB.Name = "DisturbanceGB";
+            this.DisturbanceGB.TabStop = false;
+            // 
+            // DisturbTextPB
+            // 
+            this.DisturbTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.DisturbTextPB, "DisturbTextPB");
+            this.DisturbTextPB.Name = "DisturbTextPB";
+            this.DisturbTextPB.TabStop = false;
+            this.DisturbTextPB.Click += new System.EventHandler(this.DisturbTextPB_Click);
+            // 
+            // DisturbTextRB
+            // 
+            resources.ApplyResources(this.DisturbTextRB, "DisturbTextRB");
+            this.DisturbTextRB.Checked = true;
+            this.DisturbTextRB.Name = "DisturbTextRB";
+            this.DisturbTextRB.TabStop = true;
+            this.DisturbTextRB.UseVisualStyleBackColor = true;
+            // 
+            // DisturbNoRB
+            // 
+            resources.ApplyResources(this.DisturbNoRB, "DisturbNoRB");
+            this.DisturbNoRB.Name = "DisturbNoRB";
+            this.DisturbNoRB.UseVisualStyleBackColor = true;
+            this.DisturbNoRB.CheckedChanged += new System.EventHandler(this.DisturbNoRB_CheckedChanged);
+            // 
+            // NormalVectGB
+            // 
+            this.NormalVectGB.Controls.Add(this.NormVectTextPB);
+            this.NormalVectGB.Controls.Add(this.NormalVectTextRB);
+            this.NormalVectGB.Controls.Add(this.NormalVectConstRB);
+            resources.ApplyResources(this.NormalVectGB, "NormalVectGB");
+            this.NormalVectGB.Name = "NormalVectGB";
+            this.NormalVectGB.TabStop = false;
+            // 
+            // NormVectTextPB
+            // 
+            this.NormVectTextPB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.NormVectTextPB, "NormVectTextPB");
+            this.NormVectTextPB.Name = "NormVectTextPB";
+            this.NormVectTextPB.TabStop = false;
+            this.NormVectTextPB.Click += new System.EventHandler(this.NormVectTextPB_Click);
+            // 
+            // NormalVectTextRB
+            // 
+            resources.ApplyResources(this.NormalVectTextRB, "NormalVectTextRB");
+            this.NormalVectTextRB.Checked = true;
+            this.NormalVectTextRB.Name = "NormalVectTextRB";
+            this.NormalVectTextRB.TabStop = true;
+            this.NormalVectTextRB.UseVisualStyleBackColor = true;
+            // 
+            // NormalVectConstRB
+            // 
+            resources.ApplyResources(this.NormalVectConstRB, "NormalVectConstRB");
+            this.NormalVectConstRB.Name = "NormalVectConstRB";
+            this.NormalVectConstRB.UseVisualStyleBackColor = true;
+            this.NormalVectConstRB.CheckedChanged += new System.EventHandler(this.NormalVectConstRB_CheckedChanged);
+            // 
+            // LightColorGB
+            // 
+            this.LightColorGB.Controls.Add(this.LightColorBoxPB);
+            resources.ApplyResources(this.LightColorGB, "LightColorGB");
+            this.LightColorGB.Name = "LightColorGB";
+            this.LightColorGB.TabStop = false;
+            // 
+            // LightColorBoxPB
+            // 
+            this.LightColorBoxPB.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.LightColorBoxPB, "LightColorBoxPB");
+            this.LightColorBoxPB.Name = "LightColorBoxPB";
+            this.LightColorBoxPB.TabStop = false;
+            this.LightColorBoxPB.Click += new System.EventHandler(this.LightColorBoxPB_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // BubbleCB
+            // 
+            resources.ApplyResources(this.BubbleCB, "BubbleCB");
+            this.BubbleCB.Name = "BubbleCB";
+            this.BubbleCB.UseVisualStyleBackColor = true;
+            // 
+            // Form1
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.KeyPreview = true;
-            this.Name = "GraphEditor";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GraphEditor_KeyDown);
+            this.Name = "Form1";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.WorkspacePictureBox)).EndInit();
             this.EditionGroupBox.ResumeLayout(false);
-            this.edgesGB.ResumeLayout(false);
-            this.edgesGB.PerformLayout();
-            this.ImportExportGroupBox.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.Triangle1GB.ResumeLayout(false);
+            this.Triangle1GB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColTextPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri1ColorBoxPB)).EndInit();
+            this.Triangle2GB.ResumeLayout(false);
+            this.Triangle2GB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColTextPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tri2ColorBoxPB)).EndInit();
+            this.LighSourVectGB.ResumeLayout(false);
+            this.LighSourVectGB.PerformLayout();
+            this.NormalVectWDGB.ResumeLayout(false);
+            this.DisturbanceGB.ResumeLayout(false);
+            this.DisturbanceGB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DisturbTextPB)).EndInit();
+            this.NormalVectGB.ResumeLayout(false);
+            this.NormalVectGB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NormVectTextPB)).EndInit();
+            this.LightColorGB.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.LightColorBoxPB)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -206,20 +385,36 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.GroupBox ImportExportGroupBox;
-        private System.Windows.Forms.Button OpenButton;
-        private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.GroupBox EditionGroupBox;
         private System.Windows.Forms.PictureBox WorkspacePictureBox;
-        private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.Button DeleteButton;
-        private System.Windows.Forms.GroupBox edgesGB;
-        private System.Windows.Forms.RadioButton ConstLenRB;
-        private System.Windows.Forms.RadioButton VerticalRB;
-        private System.Windows.Forms.RadioButton HorizontalRB;
-        private System.Windows.Forms.RadioButton NoRestRB;
-        private System.Windows.Forms.Button AddVerBut;
-        private System.Windows.Forms.CheckBox AutoRelCB;
+        private System.Windows.Forms.PictureBox Tri2ColorBoxPB;
+        private System.Windows.Forms.GroupBox Triangle2GB;
+        private System.Windows.Forms.RadioButton Tri2ColTextRB;
+        private System.Windows.Forms.RadioButton Tri2ColConstRB;
+        private System.Windows.Forms.GroupBox LightColorGB;
+        private System.Windows.Forms.PictureBox LightColorBoxPB;
+        private System.Windows.Forms.GroupBox NormalVectWDGB;
+        private System.Windows.Forms.GroupBox DisturbanceGB;
+        private System.Windows.Forms.GroupBox NormalVectGB;
+        private System.Windows.Forms.RadioButton NormalVectTextRB;
+        private System.Windows.Forms.RadioButton NormalVectConstRB;
+        private System.Windows.Forms.RadioButton DisturbTextRB;
+        private System.Windows.Forms.RadioButton DisturbNoRB;
+        private System.Windows.Forms.GroupBox LighSourVectGB;
+        private System.Windows.Forms.RadioButton LighSourVectAnimRB;
+        private System.Windows.Forms.RadioButton LighSourVectConstRB;
+        private System.Windows.Forms.PictureBox DisturbTextPB;
+        private System.Windows.Forms.PictureBox NormVectTextPB;
+        private System.Windows.Forms.PictureBox Tri2ColTextPB;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox Triangle1GB;
+        private System.Windows.Forms.PictureBox Tri1ColTextPB;
+        private System.Windows.Forms.RadioButton Tri1ColTextRB;
+        private System.Windows.Forms.RadioButton Tri1ColConstRB;
+        private System.Windows.Forms.PictureBox Tri1ColorBoxPB;
+        private System.Windows.Forms.CheckBox ReflectorCB;
+        private System.Windows.Forms.CheckBox BubbleCB;
     }
 }
 
